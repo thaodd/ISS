@@ -83,11 +83,11 @@ stories:
   "1.3":
     epic: "1"
     title: "Thêm, sửa, xóa máy chủ và lưu dữ liệu vào localStorage"
-    status: done
+    status: review
     sprint: 1
     order: 3
     depends_on: ["1.2"]
-    note: "Story 1.3 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.3.story.md, bản sao docs/bmad-office/story-1.3.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.3) + test(story-1.3): QA PASS. Cung cấp repository máy chủ (khóa iss.servers.v1) và thao tác xóa mà 2.2 phải xử lý kèm bản ghi cài đặt. Giả định cần PM xác nhận: id srv-NNN (max+1, có thể dùng lại id đã xóa), không bắt buộc hostname/IP duy nhất, không hoàn tác khi xóa."
+    note: "Dev (Kiếm Thánh) 2026-11-15: đã đối chiếu mã với AC1-AC13, không cần sửa mã/test; lint/build/test đạt (Node 22.13.0, 331/331 test); Dev Agent Record đã điền trong docs/stories/1.3.story.md (bản sao docs/bmad-office/story-1.3.md) -> chuyển review chờ QA. Còn mở: chưa thử tay trên trình duyệt thật (V6 của QA 1.3), các tệp cấu hình/types/data của 1.1 vẫn untracked (xem blockers). Lịch sử: Story 1.3 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.3.story.md, bản sao docs/bmad-office/story-1.3.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.3) + test(story-1.3): QA PASS. Cung cấp repository máy chủ (khóa iss.servers.v1) và thao tác xóa mà 2.2 phải xử lý kèm bản ghi cài đặt. Giả định cần PM xác nhận: id srv-NNN (max+1, có thể dùng lại id đã xóa), không bắt buộc hostname/IP duy nhất, không hoàn tác khi xóa."
   "2.1":
     epic: "2"
     title: "Danh mục ứng dụng (thêm, sửa, xóa, xem) và lưu localStorage"
