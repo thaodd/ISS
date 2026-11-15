@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Ready
+- **Trạng thái:** Review
 - **Phụ thuộc:** Story 1.1 (Done) và Story 1.2 (Done) – dùng lại `Server`, `validateServer`, `serverRepository`, `ServerList`, `ServerDetail`, `App`
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -53,35 +53,35 @@ Là một **quản trị viên hạ tầng của ISS**, tôi muốn **thêm máy
 
 ## Nhiệm vụ / việc con
 
-- [ ] **T1 – Kiểu và hàm thuần cho dữ liệu nhập (AC2, AC3, AC12)**
-  - [ ] Tạo `src/domain/serverInput.ts`: kiểu `ServerInput`, hàm `normalizeServerInput(input)` (cắt khoảng trắng, bỏ `description` rỗng, không đổi đối tượng đầu vào), hàm `generateServerId(existingIds)`.
-  - [ ] Test `serverInput.test.ts`: chuẩn hóa từng trường; mô tả toàn khoảng trắng bị bỏ; không đổi đầu vào; `generateServerId` với danh sách rỗng, liên tiếp, có khoảng trống (`srv-001`, `srv-007` → `srv-008`), id lạ không khớp mẫu bị bỏ qua, quá 3 chữ số (`srv-999` → `srv-1000`).
-- [ ] **T2 – Repository ghi dữ liệu (AC1, AC3, AC4)**
-  - [ ] Sửa `src/repositories/serverRepository.ts`: mở rộng interface `ServerRepository` với `create`, `update`, `remove`; xuất kiểu `SaveResult`. Giữ hành vi `getAll`/`getById` cũ và các cảnh báo `console.warn` của 1.1.
-  - [ ] `create`/`update` gọi `normalizeServerInput` rồi `validateServer({ ...input, id })`; `create` dùng `generateServerId`; `update` bỏ qua mọi `id` có trong `input`, dùng `id` truyền vào.
-  - [ ] Test: tạo thành công (id, vị trí cuối), dữ liệu sai không đổi dữ liệu, `update` giữ id/vị trí, `update` id lạ, `remove` có/không tồn tại, `getAll` vẫn trả bản sao.
-- [ ] **T3 – Lưu bền bằng localStorage (AC4, AC11)**
-  - [ ] Cho phép repository nhận nguồn lưu trữ qua tham số (ví dụ `createServerRepository(seed, storage)` với `storage` có kiểu giao diện `Pick<Storage, 'getItem' | 'setItem'>`), để test truyền kho giả; thể hiện `serverRepository` dùng `window.localStorage` và khóa `iss.servers.v1`. Khi `window.localStorage` không truy cập được thì dùng chế độ chỉ-bộ-nhớ.
-  - [ ] Cài đặt đủ các quy tắc nạp/ghi ở AC4 (khóa chưa có, khóa có, `[]`, JSON hỏng, không phải mảng, bản ghi hỏng/trùng id trong kho, `getItem`/`setItem` ném lỗi).
-  - [ ] Test với kho giả trong bộ nhớ (không phụ thuộc thứ tự test): từng quy tắc ở AC4 và kịch bản "tải lại" (tạo repository thứ hai trên cùng kho) của AC11.
-- [ ] **T4 – Biểu mẫu `ServerForm` (AC5, AC6, AC7, AC8, AC12)**
-  - [ ] Tạo `src/components/ServerForm.tsx` (thuần trình bày): props gồm `mode: 'create' | 'edit'`, `initialValues?: Server`, `errors: ServerFieldErrors`, `onSubmit(input: ServerInput)`, `onCancel()`. Giữ giá trị đang nhập bằng state cục bộ; không tự kiểm tra hợp lệ, chỉ hiển thị `errors` nhận từ ngoài.
-  - [ ] Tạo biểu mẫu `<form>`, các trường và nhãn theo AC5; `id` ở chế độ sửa chỉ hiển thị chữ; lỗi theo trường với `aria-invalid`/`aria-describedby`.
-  - [ ] Test `ServerForm.test.tsx`: giá trị mặc định khi thêm; điền sẵn khi sửa và `id` không phải ô nhập; submit gọi `onSubmit` với đúng dữ liệu (trường mô tả trống vẫn gửi chuỗi rỗng được, việc chuẩn hóa là của repository); hiển thị lỗi từng trường kèm `aria-invalid`; giữ nguyên giá trị khi có lỗi; "Hủy" gọi `onCancel`; không có lựa chọn "Tất cả" trong ô chọn.
-- [ ] **T5 – Cập nhật `ServerList` và `ServerDetail` (AC5, AC6, AC9)**
-  - [ ] `ServerList`: thêm prop `onCreate()` và nút "Thêm máy chủ" luôn hiển thị (cả khi `servers` rỗng và khi không có kết quả lọc).
-  - [ ] `ServerDetail`: thêm props `onEdit()` và `onDelete()`; nút "Sửa" và "Xóa" chỉ khi `server` tồn tại; bấm "Xóa" hiện vùng xác nhận (state cục bộ của component) với "Xác nhận xóa"/"Hủy"; chỉ "Xác nhận xóa" mới gọi `onDelete()`.
-  - [ ] Cập nhật/ bổ sung test của hai component: nút mới, luồng xác nhận (hủy không gọi `onDelete`, xác nhận gọi đúng một lần), không có nút Sửa/Xóa khi không tìm thấy máy chủ.
-- [ ] **T6 – Ghép trong `App` (AC5–AC10, AC12)**
-  - [ ] Sửa `src/App.tsx`: mở rộng trạng thái màn hình (danh sách / chi tiết / thêm / sửa) bằng `useState` (không router); giữ `filters` ở `App` như 1.2; lưu danh sách máy chủ trong state và đọc lại từ repository sau mỗi thao tác ghi để giao diện cập nhật.
-  - [ ] Nhận prop tùy chọn `repository?: ServerRepository` mặc định là `serverRepository` để test truyền repository riêng (kho giả) mà không dùng `localStorage` thật.
-  - [ ] Gọi `create`/`update`/`remove`, truyền `errors` của `SaveResult` xuống `ServerForm`, đặt thông báo `role="status"` theo AC10 và xóa thông báo khi chuyển màn hình.
-- [ ] **T7 – Test luồng `App` (AC5–AC11, AC13)**
-  - [ ] Thêm test tích hợp không mock module (ví dụ `src/App.crud.test.tsx`), mỗi test tạo repository mới trên kho giả riêng và truyền qua prop `repository`: thêm hợp lệ → chi tiết + thông báo + "Đã tải 4 máy chủ"; thêm sai → lỗi từng trường, giữ giá trị, không đổi "Đã tải N"; sửa hợp lệ và sửa xóa mô tả; hủy khi thêm/sửa; xóa có xác nhận (hủy rồi xác nhận) và danh sách giữ nguyên bộ lọc; xóa hết rồi thấy "Chưa có máy chủ nào" cùng nút "Thêm máy chủ"; "tải lại" (render lại `App` với repository mới trên cùng kho) thấy dữ liệu đã đổi.
-  - [ ] Chạy lại và giữ cho đạt `App.test.tsx` và `App.integration.test.tsx` (mock module chỉ có `getAll`/`getById` vẫn dùng được nếu nhánh đọc không gọi phương thức ghi; nếu phải sửa, sửa tối thiểu).
-- [ ] **T8 – Hoàn tất (AC13)**
-  - [ ] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt bằng Node ≥ 20.19.
-  - [ ] Ghi kết quả và bằng chứng theo từng AC vào mục Dev Agent Record, đổi trạng thái story sang `Review` và cập nhật `sprint-status.yaml`.
+- [x] **T1 – Kiểu và hàm thuần cho dữ liệu nhập (AC2, AC3, AC12)**
+  - [x] Tạo `src/domain/serverInput.ts`: kiểu `ServerInput`, hàm `normalizeServerInput(input)` (cắt khoảng trắng, bỏ `description` rỗng, không đổi đối tượng đầu vào), hàm `generateServerId(existingIds)`.
+  - [x] Test `serverInput.test.ts`: chuẩn hóa từng trường; mô tả toàn khoảng trắng bị bỏ; không đổi đầu vào; `generateServerId` với danh sách rỗng, liên tiếp, có khoảng trống (`srv-001`, `srv-007` → `srv-008`), id lạ không khớp mẫu bị bỏ qua, quá 3 chữ số (`srv-999` → `srv-1000`).
+- [x] **T2 – Repository ghi dữ liệu (AC1, AC3, AC4)**
+  - [x] Sửa `src/repositories/serverRepository.ts`: mở rộng interface `ServerRepository` với `create`, `update`, `remove`; xuất kiểu `SaveResult`. Giữ hành vi `getAll`/`getById` cũ và các cảnh báo `console.warn` của 1.1.
+  - [x] `create`/`update` gọi `normalizeServerInput` rồi `validateServer({ ...input, id })`; `create` dùng `generateServerId`; `update` bỏ qua mọi `id` có trong `input`, dùng `id` truyền vào.
+  - [x] Test: tạo thành công (id, vị trí cuối), dữ liệu sai không đổi dữ liệu, `update` giữ id/vị trí, `update` id lạ, `remove` có/không tồn tại, `getAll` vẫn trả bản sao.
+- [x] **T3 – Lưu bền bằng localStorage (AC4, AC11)**
+  - [x] Cho phép repository nhận nguồn lưu trữ qua tham số (ví dụ `createServerRepository(seed, storage)` với `storage` có kiểu giao diện `Pick<Storage, 'getItem' | 'setItem'>`), để test truyền kho giả; thể hiện `serverRepository` dùng `window.localStorage` và khóa `iss.servers.v1`. Khi `window.localStorage` không truy cập được thì dùng chế độ chỉ-bộ-nhớ.
+  - [x] Cài đặt đủ các quy tắc nạp/ghi ở AC4 (khóa chưa có, khóa có, `[]`, JSON hỏng, không phải mảng, bản ghi hỏng/trùng id trong kho, `getItem`/`setItem` ném lỗi).
+  - [x] Test với kho giả trong bộ nhớ (không phụ thuộc thứ tự test): từng quy tắc ở AC4 và kịch bản "tải lại" (tạo repository thứ hai trên cùng kho) của AC11.
+- [x] **T4 – Biểu mẫu `ServerForm` (AC5, AC6, AC7, AC8, AC12)**
+  - [x] Tạo `src/components/ServerForm.tsx` (thuần trình bày): props gồm `mode: 'create' | 'edit'`, `initialValues?: Server`, `errors: ServerFieldErrors`, `onSubmit(input: ServerInput)`, `onCancel()`. Giữ giá trị đang nhập bằng state cục bộ; không tự kiểm tra hợp lệ, chỉ hiển thị `errors` nhận từ ngoài.
+  - [x] Tạo biểu mẫu `<form>`, các trường và nhãn theo AC5; `id` ở chế độ sửa chỉ hiển thị chữ; lỗi theo trường với `aria-invalid`/`aria-describedby`.
+  - [x] Test `ServerForm.test.tsx`: giá trị mặc định khi thêm; điền sẵn khi sửa và `id` không phải ô nhập; submit gọi `onSubmit` với đúng dữ liệu (trường mô tả trống vẫn gửi chuỗi rỗng được, việc chuẩn hóa là của repository); hiển thị lỗi từng trường kèm `aria-invalid`; giữ nguyên giá trị khi có lỗi; "Hủy" gọi `onCancel`; không có lựa chọn "Tất cả" trong ô chọn.
+- [x] **T5 – Cập nhật `ServerList` và `ServerDetail` (AC5, AC6, AC9)**
+  - [x] `ServerList`: thêm prop `onCreate()` và nút "Thêm máy chủ" luôn hiển thị (cả khi `servers` rỗng và khi không có kết quả lọc).
+  - [x] `ServerDetail`: thêm props `onEdit()` và `onDelete()`; nút "Sửa" và "Xóa" chỉ khi `server` tồn tại; bấm "Xóa" hiện vùng xác nhận (state cục bộ của component) với "Xác nhận xóa"/"Hủy"; chỉ "Xác nhận xóa" mới gọi `onDelete()`.
+  - [x] Cập nhật/ bổ sung test của hai component: nút mới, luồng xác nhận (hủy không gọi `onDelete`, xác nhận gọi đúng một lần), không có nút Sửa/Xóa khi không tìm thấy máy chủ.
+- [x] **T6 – Ghép trong `App` (AC5–AC10, AC12)**
+  - [x] Sửa `src/App.tsx`: mở rộng trạng thái màn hình (danh sách / chi tiết / thêm / sửa) bằng `useState` (không router); giữ `filters` ở `App` như 1.2; lưu danh sách máy chủ trong state và đọc lại từ repository sau mỗi thao tác ghi để giao diện cập nhật.
+  - [x] Nhận prop tùy chọn `repository?: ServerRepository` mặc định là `serverRepository` để test truyền repository riêng (kho giả) mà không dùng `localStorage` thật.
+  - [x] Gọi `create`/`update`/`remove`, truyền `errors` của `SaveResult` xuống `ServerForm`, đặt thông báo `role="status"` theo AC10 và xóa thông báo khi chuyển màn hình.
+- [x] **T7 – Test luồng `App` (AC5–AC11, AC13)**
+  - [x] Thêm test tích hợp không mock module (ví dụ `src/App.crud.test.tsx`), mỗi test tạo repository mới trên kho giả riêng và truyền qua prop `repository`: thêm hợp lệ → chi tiết + thông báo + "Đã tải 4 máy chủ"; thêm sai → lỗi từng trường, giữ giá trị, không đổi "Đã tải N"; sửa hợp lệ và sửa xóa mô tả; hủy khi thêm/sửa; xóa có xác nhận (hủy rồi xác nhận) và danh sách giữ nguyên bộ lọc; xóa hết rồi thấy "Chưa có máy chủ nào" cùng nút "Thêm máy chủ"; "tải lại" (render lại `App` với repository mới trên cùng kho) thấy dữ liệu đã đổi.
+  - [x] Chạy lại và giữ cho đạt `App.test.tsx` và `App.integration.test.tsx` (mock module chỉ có `getAll`/`getById` vẫn dùng được nếu nhánh đọc không gọi phương thức ghi; nếu phải sửa, sửa tối thiểu).
+- [x] **T8 – Hoàn tất (AC13)**
+  - [x] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt bằng Node ≥ 20.19.
+  - [x] Ghi kết quả và bằng chứng theo từng AC vào mục Dev Agent Record, đổi trạng thái story sang `Review` và cập nhật `sprint-status.yaml`.
 
 ## Ghi chú cho Dev
 
@@ -148,5 +148,56 @@ Khi xem thử bằng `npm run dev`, muốn quay về dữ liệu mẫu thì xóa
 Mọi ô nhiệm vụ đã đánh dấu; `lint`, `build`, `test` đều đạt; AC1–AC13 có bằng chứng trong Dev Agent Record; sau đó chuyển story sang `review` để QA (Linh Y Tiên Tử) kiểm thử.
 
 ## Dev Agent Record
+
+- **Dev:** Kiếm Thánh (Amelia) · 2026-11-15 · Node v22.13.0
+- **Trạng thái sau khi làm:** Review (T1–T8 xong)
+
+### Tệp đã tạo
+
+- `src/domain/serverInput.ts`, `src/domain/serverInput.test.ts` – `ServerInput`, `normalizeServerInput`, `generateServerId`.
+- `src/components/ServerForm.tsx`, `src/components/ServerForm.test.tsx` – biểu mẫu thêm/sửa (thuần trình bày).
+- `src/App.crud.test.tsx` – test tích hợp thêm/sửa/xóa không mock module, kho giả theo từng test.
+- `src/test/memoryStorage.ts` – kho `localStorage` giả dùng cho test.
+
+### Tệp đã sửa
+
+- `src/repositories/serverRepository.ts` – thêm `create`/`update`/`remove`, `SaveResult`, `createServerRepository(seed, storage?)`, khóa `iss.servers.v1`, chế độ chỉ-bộ-nhớ. Giữ `createJsonServerRepository` (gọi `createServerRepository` không kho) để test cũ của 1.1 không đổi.
+- `src/repositories/serverRepository.test.ts` – bổ sung test ghi và lưu bền (giữ nguyên test cũ).
+- `src/components/ServerList.tsx` (+ test) – prop `onCreate`, nút "Thêm máy chủ".
+- `src/components/ServerDetail.tsx` (+ test) – props `onEdit`/`onDelete`, nút "Sửa"/"Xóa", vùng xác nhận xóa trong trang.
+- `src/App.tsx` – trạng thái màn hình (list/detail/create/edit), prop `repository?`, thông báo `role="status"`, lỗi từ `SaveResult`.
+- `src/App.css` – style biểu mẫu, lỗi, thông báo, vùng xác nhận.
+- `src/App.test.tsx`, `src/App.integration.test.tsx` – **không sửa**, vẫn đạt. Test 1.1/1.2 ở `ServerList.test.tsx`/`ServerDetail.test.tsx` chỉ được thêm props mới (`onCreate`, `onEdit`, `onDelete`) vào chỗ render vì chúng là prop bắt buộc; không xóa test hay đổi kỳ vọng.
+- Không sửa: `types/server.ts`, `validateServer.ts`, `serverLabels.ts`, `filterServers.ts`, `servers.json`.
+
+### Lệnh đã chạy (Node v22.13.0)
+
+```
+npm run lint    -> đạt, không cảnh báo
+npm run build   -> đạt (tsc -b && vite build)
+npm test        -> 11 tệp, 136 test đều đạt (trước story: 75 test)
+```
+
+### Bằng chứng theo AC
+
+- **AC1/AC3:** `serverRepository.test.ts` (nhóm `create`, `update`, `remove`): vị trí cuối, giữ id/vị trí khi sửa, id lạ → `{ errors: { id: 'Không tìm thấy máy chủ.' } }`, `remove` trả `true/false`, `getAll` vẫn là bản sao; dữ liệu sai không đổi bộ nhớ lẫn kho. `create`/`update` dùng lại `validateServer`.
+- **AC2:** `serverInput.test.ts`: rỗng → `srv-001`, khoảng trống `srv-007` → `srv-008`, id lạ bị bỏ qua, `srv-999` → `srv-1000`; `App.crud.test.tsx` thêm máy chủ đầu tiên có id `srv-004`.
+- **AC4/AC11:** `serverRepository.test.ts` (nhóm "lưu bền"): chưa có khóa, có khóa, `[]`, bản ghi hỏng/trùng, JSON hỏng, không phải mảng, `getItem`/`setItem` ném lỗi, "tải lại" bằng repository thứ hai, xóa hết rồi tải lại; `App.crud.test.tsx` có hai test "tải lại".
+- **AC5–AC8:** `ServerForm.test.tsx` + `App.crud.test.tsx`: mặc định (Development, Đang hoạt động), không có "Tất cả", điền sẵn khi sửa và `id` chỉ là chữ, lỗi theo trường kèm `aria-invalid`/`aria-describedby`, giữ giá trị khi lỗi, hủy từ thêm → danh sách (giữ bộ lọc), hủy từ sửa → chi tiết, xóa mô tả → "Không có mô tả", Enter (submit) lưu được.
+- **AC9:** `ServerDetail.test.tsx` + `App.crud.test.tsx`: nội dung xác nhận đúng chữ, "Hủy" không gọi `onDelete`, "Xác nhận xóa" gọi đúng một lần, không dùng `window.confirm`.
+- **AC10:** `App.crud.test.tsx`: ba thông báo `role="status"`, biến mất khi chuyển màn hình, "Đã tải N" cập nhật ngay.
+- **AC12:** UI không import `servers.json` hay chạm `localStorage` (chỉ `serverRepository.ts`); `App` là nơi duy nhất gọi repository; không `any` (ESLint đạt); không thêm thư viện.
+- **AC13:** lint/build/test đạt; test 1.1 và 1.2 đạt nguyên vẹn.
+
+### Ghi chú / quyết định
+
+- Lỗi `errors.id` (id không tồn tại khi sửa) hiện bằng `role="alert"` ở đầu biểu mẫu vì không có ô nhập `id`. Nếu máy chủ biến mất trong lúc đang ở màn hình sửa, `App` hiện lại màn hình chi tiết "Không tìm thấy máy chủ".
+- Không ghi `localStorage` lúc khởi tạo lần đầu; chỉ ghi sau thao tác ghi thành công (đúng AC4). Dữ liệu mẫu được nạp lại từ `servers.json` cho đến lần ghi đầu tiên.
+- `getItem` ném lỗi → repository chạy với dữ liệu mẫu trong bộ nhớ, các lần ghi sau vẫn thử `setItem` và chỉ `console.warn` nếu lỗi.
+- Dữ liệu nhập thuần chuẩn hóa ở `domain`; `ServerForm` gửi `description: ''` khi trống, repository mới bỏ trường này.
+- Test mất ~79 giây do jsdom khởi tạo mỗi tệp (V2 của `qa-1.2.md`); tệp test mới thêm 3 lần khởi tạo, chưa tối ưu cấu hình vitest vì ngoài phạm vi.
+- Chưa quản lý focus bàn phím khi chuyển màn hình (V3 của `qa-1.2.md`) – ngoài phạm vi theo story.
+- V1: các tệp cấu hình/types/data của 1.1 vẫn untracked (`??`); người điều phối cần commit đủ cùng các tệp mới của 1.3.
+- Chưa xem thử giao diện trên trình duyệt thật (`npm run dev`); luồng UI chỉ được kiểm bằng test jsdom.
 
 ## QA Results

@@ -35,9 +35,25 @@ const servers: Server[] = [
   },
 ]
 
-function Harness({ list = servers, onSelect = () => {} }: { list?: Server[]; onSelect?: (id: string) => void }) {
+function Harness({
+  list = servers,
+  onSelect = () => {},
+  onCreate = () => {},
+}: {
+  list?: Server[]
+  onSelect?: (id: string) => void
+  onCreate?: () => void
+}) {
   const [filters, setFilters] = useState<ServerFilters>(DEFAULT_FILTERS)
-  return <ServerList servers={list} filters={filters} onFiltersChange={setFilters} onSelect={onSelect} />
+  return (
+    <ServerList
+      servers={list}
+      filters={filters}
+      onFiltersChange={setFilters}
+      onSelect={onSelect}
+      onCreate={onCreate}
+    />
+  )
 }
 
 describe('ServerList', () => {
@@ -88,7 +104,13 @@ describe('ServerList', () => {
   it('gọi onFiltersChange khi gõ tìm kiếm và khi đổi bộ lọc', () => {
     const onFiltersChange = vi.fn()
     render(
-      <ServerList servers={servers} filters={DEFAULT_FILTERS} onFiltersChange={onFiltersChange} onSelect={() => {}} />,
+      <ServerList
+        servers={servers}
+        filters={DEFAULT_FILTERS}
+        onFiltersChange={onFiltersChange}
+        onSelect={() => {}}
+        onCreate={() => {}}
+      />,
     )
 
     fireEvent.change(screen.getByLabelText('Tìm kiếm'), { target: { value: 'web' } })
@@ -154,5 +176,19 @@ describe('ServerList', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Máy build' }))
     expect(onSelect).toHaveBeenCalledTimes(1)
     expect(onSelect).toHaveBeenCalledWith('srv-003')
+  })
+
+  it('nút "Thêm máy chủ" gọi onCreate và luôn hiển thị (có dữ liệu, rỗng, không khớp lọc)', () => {
+    const onCreate = vi.fn()
+    const { unmount } = render(<Harness onCreate={onCreate} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Thêm máy chủ' }))
+    expect(onCreate).toHaveBeenCalledTimes(1)
+
+    fireEvent.change(screen.getByLabelText('Tìm kiếm'), { target: { value: 'zzz' } })
+    expect(screen.getByRole('button', { name: 'Thêm máy chủ' })).toBeInTheDocument()
+    unmount()
+
+    render(<Harness list={[]} />)
+    expect(screen.getByRole('button', { name: 'Thêm máy chủ' })).toBeInTheDocument()
   })
 })

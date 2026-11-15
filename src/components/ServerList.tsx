@@ -13,6 +13,7 @@ interface ServerListProps {
   filters: ServerFilters
   onFiltersChange: (filters: ServerFilters) => void
   onSelect: (id: string) => void
+  onCreate: () => void
 }
 
 function parseStatus(value: string): ServerStatus | 'all' {
@@ -23,11 +24,15 @@ function parseEnvironment(value: string): ServerEnvironment | 'all' {
   return SERVER_ENVIRONMENTS.find((environment) => environment === value) ?? 'all'
 }
 
-function ServerList({ servers, filters, onFiltersChange, onSelect }: ServerListProps) {
+function ServerList({ servers, filters, onFiltersChange, onSelect, onCreate }: ServerListProps) {
   const visibleServers = filterServers(servers, filters)
 
   return (
     <section aria-label="Danh sách máy chủ">
+      <button type="button" onClick={onCreate}>
+        Thêm máy chủ
+      </button>
+
       <div className="server-filters">
         <div>
           <label htmlFor="server-search">Tìm kiếm</label>

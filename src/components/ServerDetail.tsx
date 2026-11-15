@@ -1,12 +1,17 @@
+import { useState } from 'react'
 import { ENVIRONMENT_LABELS, STATUS_LABELS } from '../domain/serverLabels'
 import type { Server } from '../types/server'
 
 interface ServerDetailProps {
   server: Server | undefined
   onBack: () => void
+  onEdit: () => void
+  onDelete: () => void
 }
 
-function ServerDetail({ server, onBack }: ServerDetailProps) {
+function ServerDetail({ server, onBack, onEdit, onDelete }: ServerDetailProps) {
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+
   return (
     <section aria-label="Chi tiết máy chủ">
       <button type="button" onClick={onBack}>
@@ -18,6 +23,27 @@ function ServerDetail({ server, onBack }: ServerDetailProps) {
       ) : (
         <>
           <h2>{server.name}</h2>
+          <div className="detail-actions">
+            <button type="button" onClick={onEdit}>
+              Sửa
+            </button>
+            <button type="button" onClick={() => setConfirmingDelete(true)}>
+              Xóa
+            </button>
+          </div>
+
+          {confirmingDelete && (
+            <div role="alertdialog" aria-label="Xác nhận xóa" className="confirm-delete">
+              <p>{`Xóa máy chủ "${server.name}"? Thao tác này không thể hoàn tác.`}</p>
+              <button type="button" onClick={onDelete}>
+                Xác nhận xóa
+              </button>
+              <button type="button" onClick={() => setConfirmingDelete(false)}>
+                Hủy
+              </button>
+            </div>
+          )}
+
           <dl>
             <dt>Tên</dt>
             <dd>{server.name}</dd>
