@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Ready
+- **Trạng thái:** Review
 - **Phụ thuộc:** không (đây là story đầu tiên, là móng của Epic 1)
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -30,30 +30,30 @@ Là một **lập trình viên của ISS**, tôi muốn **có sẵn khung ứng 
 
 ## Nhiệm vụ / việc con
 
-- [ ] **T1 – Khởi tạo project (AC1)**
-  - [ ] Tạo project Vite + React + TypeScript tại gốc repo, giữ nguyên thư mục `docs/` và `.git`.
-  - [ ] Cấu hình ESLint, script `dev`, `build`, `lint`, `test` trong `package.json`.
-  - [ ] Thêm `.gitignore` (`node_modules`, `dist`, v.v.).
-- [ ] **T2 – Thiết lập test (AC8)**
-  - [ ] Cài Vitest, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`; cấu hình môi trường `jsdom` và file setup.
-- [ ] **T3 – Kiểu dữ liệu (AC2)**
-  - [ ] Tạo `src/types/server.ts` với `Server`, `ServerStatus`, `ServerEnvironment`.
-- [ ] **T4 – Dữ liệu mẫu (AC3)**
-  - [ ] Tạo `src/data/servers.json` với ≥ 3 máy chủ phủ đủ `status` và `environment`.
-  - [ ] Bật `resolveJsonModule` trong `tsconfig` để import JSON.
-- [ ] **T5 – Kiểm tra hợp lệ (AC5)**
-  - [ ] Tạo `src/domain/validateServer.ts`.
-  - [ ] Viết test cho từng quy tắc: thiếu trường bắt buộc, IP sai, enum sai, bản ghi hợp lệ.
-- [ ] **T6 – Repository (AC4, AC6)**
-  - [ ] Tạo `src/repositories/serverRepository.ts` (interface `ServerRepository`) và bản cài đặt đọc từ JSON.
-  - [ ] Lọc bản ghi không hợp lệ/trùng `id`, cảnh báo bằng `console.warn`.
-  - [ ] Viết test cho `getAll`, `getById`, bản ghi hỏng, trùng id.
-- [ ] **T7 – Màn hình khung (AC7)**
-  - [ ] Cập nhật `src/App.tsx` hiển thị tiêu đề và "Đã tải N máy chủ" từ repository.
-  - [ ] Viết test render cho `App`.
-- [ ] **T8 – Hoàn tất (AC1, AC8)**
-  - [ ] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt.
-  - [ ] Ghi kết quả vào mục Dev Agent Record.
+- [x] **T1 – Khởi tạo project (AC1)**
+  - [x] Tạo project Vite + React + TypeScript tại gốc repo, giữ nguyên thư mục `docs/` và `.git`.
+  - [x] Cấu hình ESLint, script `dev`, `build`, `lint`, `test` trong `package.json`.
+  - [x] Thêm `.gitignore` (`node_modules`, `dist`, v.v.).
+- [x] **T2 – Thiết lập test (AC8)**
+  - [x] Cài Vitest, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`; cấu hình môi trường `jsdom` và file setup.
+- [x] **T3 – Kiểu dữ liệu (AC2)**
+  - [x] Tạo `src/types/server.ts` với `Server`, `ServerStatus`, `ServerEnvironment`.
+- [x] **T4 – Dữ liệu mẫu (AC3)**
+  - [x] Tạo `src/data/servers.json` với ≥ 3 máy chủ phủ đủ `status` và `environment`.
+  - [x] Bật `resolveJsonModule` trong `tsconfig` để import JSON.
+- [x] **T5 – Kiểm tra hợp lệ (AC5)**
+  - [x] Tạo `src/domain/validateServer.ts`.
+  - [x] Viết test cho từng quy tắc: thiếu trường bắt buộc, IP sai, enum sai, bản ghi hợp lệ.
+- [x] **T6 – Repository (AC4, AC6)**
+  - [x] Tạo `src/repositories/serverRepository.ts` (interface `ServerRepository`) và bản cài đặt đọc từ JSON.
+  - [x] Lọc bản ghi không hợp lệ/trùng `id`, cảnh báo bằng `console.warn`.
+  - [x] Viết test cho `getAll`, `getById`, bản ghi hỏng, trùng id.
+- [x] **T7 – Màn hình khung (AC7)**
+  - [x] Cập nhật `src/App.tsx` hiển thị tiêu đề và "Đã tải N máy chủ" từ repository.
+  - [x] Viết test render cho `App`.
+- [x] **T8 – Hoàn tất (AC1, AC8)**
+  - [x] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt.
+  - [x] Ghi kết quả vào mục Dev Agent Record.
 
 ## Ghi chú cho Dev
 
@@ -103,7 +103,47 @@ Mọi ô nhiệm vụ đã đánh dấu; `lint`, `build`, `test` đều đạt; 
 
 ## Dev Agent Record
 
-_(Để trống – Developer điền: mô hình/agent dùng, danh sách tệp đã tạo/sửa, lệnh test đã chạy và kết quả, các quyết định/lệch so với story.)_
+**Agent:** Kiếm Thánh · Developer (Amelia) – hoàn thành 2026-11-15. Trạng thái: **Review**.
+
+### Môi trường
+- Máy mặc định dùng Node v10.24.1 / npm 6 (quá cũ cho Vite/Vitest). Đã dùng Node **v22.13.0** (có sẵn trong nvm, gắn vào PATH theo từng lệnh, không đổi cấu hình máy). Cần Node ≥ 20.19 hoặc ≥ 22.12 để chạy dự án.
+- Phiên bản cài được: Vite 8.3.8, Vitest 5.1.0, React 19.3.1, TypeScript 6.0.3, ESLint 10.15.0, `@testing-library/react` 16.3.3, `@testing-library/jest-dom` 7.0.1, jsdom 29.1.1.
+
+### Tệp đã tạo
+- Cấu hình: `package.json`, `package-lock.json`, `.gitignore`, `index.html`, `vite.config.ts` (gồm cấu hình Vitest: jsdom, globals, setup), `tsconfig.json`, `tsconfig.app.json` (strict, `resolveJsonModule`), `tsconfig.node.json`, `eslint.config.js` (cấm `any`).
+- Mã nguồn: `src/main.tsx`, `src/App.tsx`, `src/vite-env.d.ts`, `src/types/server.ts`, `src/data/servers.json`, `src/domain/validateServer.ts`, `src/repositories/serverRepository.ts`.
+- Test: `src/test/setup.ts`, `src/domain/validateServer.test.ts`, `src/repositories/serverRepository.test.ts`, `src/App.test.tsx`.
+- Tài liệu sửa: chỉ `story-1.1.md` (tệp này) và `sprint-status.yaml`.
+
+### Lệnh đã chạy và kết quả
+| Lệnh | Kết quả |
+|---|---|
+| `npm install` | thành công |
+| `npm test` (`vitest run`) | **3 tệp, 37 test, đạt toàn bộ** |
+| `npm run lint` (`eslint .`) | không lỗi, không cảnh báo |
+| `npm run build` (`tsc -b && vite build`) | thành công, 19 module, `dist/` ~222 kB |
+| `npm run dev` | Vite khởi động (ready ~1 s); `GET /`, `/src/main.tsx`, `/src/data/servers.json` đều trả 200; đã dừng sau khi kiểm tra |
+
+### Bằng chứng theo AC
+- **AC1:** dev/build/lint đạt như bảng trên.
+- **AC2:** `src/types/server.ts` – `Server`, `ServerStatus`, `ServerEnvironment` (kèm hằng `SERVER_STATUSES`, `SERVER_ENVIRONMENTS` để dùng chung với validator).
+- **AC3:** `servers.json` có 3 máy chủ (`srv-001` production/online, `srv-002` staging/maintenance, `srv-003` development/offline); test `serverRepository (nguồn servers.json)` xác nhận phủ đủ 3 status và 3 environment.
+- **AC4:** interface `ServerRepository { getAll, getById }`; `createJsonServerRepository(raw)` là bản cài đặt JSON, `serverRepository` là thể hiện dùng JSON mẫu. `getById` id lạ → `undefined`, không ném lỗi (có test).
+- **AC5:** `validateServer(data: unknown)` trả `{valid:true, server}` hoặc `{valid:false, errors}` theo từng trường; test phủ thiếu `id/name/hostname/os`, chuỗi toàn khoảng trắng, 8 IP sai, 3 IP đúng, enum sai, `description` sai kiểu, đầu vào không phải object, gom nhiều lỗi.
+- **AC6:** bản ghi hỏng hoặc trùng `id` bị loại + `console.warn` (có test đếm số lần cảnh báo; giữ bản ghi đầu tiên khi trùng id).
+- **AC7:** `App.tsx` hiển thị "ISS – Quản lý máy chủ" và "Đã tải N máy chủ"; UI chỉ import repository, không import JSON. Test dùng repository giả (2 máy chủ → "Đã tải 2 máy chủ").
+- **AC8:** `npm test` đạt như trên.
+
+### Quyết định / lệch so với story
+- `architecture.md` còn là khung rỗng nên bám hoàn toàn vào story (giả định Vite + TS + Vitest của SM giữ nguyên). Không có mâu thuẫn cần báo lại.
+- Tài liệu thực tế nằm ở `docs/bmad-office/story-1.1.md` (không phải `docs/stories/1.1.story.md` như đề bài ghi).
+- Bổ sung ngoài danh sách T1–T2 nhưng cần thiết kỹ thuật: `@vitejs/plugin-react`, `@types/react`, `@types/react-dom`, `@types/node`, `@testing-library/dom` (peer của testing-library/react), và bộ ESLint (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `globals`). Không thêm router/state manager/UI kit.
+- Quy tắc validator tự quyết thêm (story chưa nêu): `id` và `os` bắt buộc không rỗng; chuỗi chỉ gồm khoảng trắng bị coi là thiếu; IPv4 không chấp nhận số 0 đứng đầu (vd `01.2.3.4`); `getAll()` trả bản sao mảng.
+- `npm audit` báo 7 lỗ hổng mức moderate trong cây phụ thuộc dev (chuỗi `@typescript-eslint`); chưa chạy `audit fix --force` vì có thể phá vỡ phiên bản. Chỉ ảnh hưởng công cụ dev, không vào bản build.
+- Chưa kiểm tra giao diện trên trình duyệt thật (không có trình duyệt tự động); mới kiểm chứng bằng test render (jsdom) và dev server trả 200.
+
+### Bàn giao QA
+Linh Y Tiên Tử chạy lại `npm install && npm test && npm run lint && npm run build` bằng Node ≥ 20.19, và nên mở `npm run dev` xem trang hiển thị "Đã tải 3 máy chủ". Lưu ý `qa-1.1.md` hiện là bản "mô phỏng" cũ, cần viết lại sau khi kiểm thử thật.
 
 ## QA Results
 
