@@ -1,20 +1,168 @@
-<!-- Tạo bởi BMAD Office (mô phỏng) lúc 22:27:31 15/11/2026. Đây là khung tài liệu theo mẫu, hãy hoàn thiện nội dung. -->
-
 # Story 1.2: Danh sách, tìm kiếm/lọc và xem chi tiết máy chủ
 
-- **Project:** iss
-- **Agent:** Thiết Tướng · Scrum Master (Bob)
-- **Quy mô:** 82 file, khoảng 11.592 dòng (đọc 81 file)
-- **Ngôn ngữ chính:** TypeScript (52 file), CSS (1 file), JavaScript (1 file), HTML (1 file)
+- **Project:** ISS
+- **Epic:** 1 – Quản lý thông tin máy chủ
+- **Người soạn:** Thiết Tướng · Scrum Master (Bob)
+- **Trạng thái:** Done
+- **Phụ thuộc:** Story 1.1 (khung dự án, kiểu `Server`, `serverRepository`, `validateServer`)
+- **Bàn giao cho:** Kiếm Thánh · Developer
 
-## Mô tả
+> **Lưu ý hiện trạng (đọc trước):** mã của story này đã tồn tại trong repo (commit `feat(story-1.2)` `7860560`, QA PASS `a098ff3`) và đã được các story 1.3, 2.1–2.3 mở rộng thêm. Tài liệu này được soạn lại đầy đủ vì `docs/bmad-office/story-1.2.md` từng bị ghi đè bằng khung rỗng (bản gốc: `git show 4e0908e:docs/bmad-office/story-1.2.md`; báo cáo QA cũ: `git show 18e0731~1:docs/bmad-office/qa-1.2.md`). Dev **không dựng lại từ đầu**: đối chiếu mã hiện có với từng AC, bổ sung phần thiếu (nếu có), rồi điền Dev Agent Record. Phạm vi AC dưới đây là phạm vi **chỉ đọc** của 1.2; các nút/chức năng thêm, sửa, xóa, cài đặt do story sau thêm vào cùng component thì **giữ nguyên, không gỡ**.
 
-Là một …, tôi muốn …, để …
+## Câu chuyện
+
+Là một **quản trị viên hạ tầng của ISS**, tôi muốn **xem danh sách các máy chủ, tìm kiếm/lọc theo tên, hostname, địa chỉ IP, trạng thái, môi trường và mở trang chi tiết của từng máy chủ**, để **nắm nhanh tình trạng hạ tầng và tra cứu đầy đủ thông tin một máy chủ mà không phải mở file dữ liệu**.
+
+## Phạm vi
+
+**Trong phạm vi (chỉ đọc):** bảng danh sách máy chủ lấy từ repository; ô tìm kiếm; bộ lọc trạng thái và môi trường; màn hình chi tiết một máy chủ; chuyển qua lại danh sách ↔ chi tiết bằng state; các trạng thái rỗng; test.
+
+**Ngoài phạm vi (để story khác):** thêm/sửa/xóa máy chủ và ghi dữ liệu (1.3); ứng dụng cài đặt (Epic 2); lưu bộ lọc xuống localStorage/URL; sắp xếp theo cột; phân trang; định tuyến (`react-router`); backend/API.
+
+## Quyết định đã được người dùng xác nhận
+
+- Phạm vi 1.2 = danh sách + tìm kiếm/lọc + chi tiết, **chỉ đọc**; chưa ghi dữ liệu ở story này.
+- **Không thêm thư viện** điều hướng: chuyển danh sách ↔ chi tiết bằng state trong `App`.
 
 ## Tiêu chí nghiệm thu
 
-- [ ] 
+1. **AC1 – Danh sách máy chủ:** `App` hiển thị bảng gồm mọi máy chủ từ `serverRepository.getAll()`, mỗi dòng có các cột: Tên, Hostname, Địa chỉ IP, Môi trường, Trạng thái. Thứ tự dòng giữ nguyên thứ tự repository trả về. Với dữ liệu mẫu (`src/data/servers.json`) thấy đủ 3 dòng: "Web chính" (`srv-001`), "Cơ sở dữ liệu thử nghiệm" (`srv-002`), "Máy build" (`srv-003`). Dòng "Đã tải N máy chủ" của 1.1 vẫn còn, N là tổng số máy chủ hợp lệ.
+2. **AC2 – Nhãn tiếng Việt:** trạng thái và môi trường hiển thị bằng nhãn tiếng Việt, không lộ giá trị thô: `online` → "Đang hoạt động", `offline` → "Ngừng hoạt động", `maintenance` → "Bảo trì"; `production` → "Production", `staging` → "Staging", `development` → "Development". Trạng thái phải phân biệt được không chỉ bằng màu (luôn có chữ).
+3. **AC3 – Tìm kiếm:** có ô nhập "Tìm kiếm" lọc danh sách theo **tên, hostname hoặc địa chỉ IP** chứa chuỗi nhập, không phân biệt hoa/thường, bỏ khoảng trắng đầu/cuối. Ô trống hoặc chỉ gồm khoảng trắng nghĩa là không lọc. Không tìm theo các trường khác (hệ điều hành, mô tả).
+4. **AC4 – Lọc theo trạng thái và môi trường:** có hai ô chọn "Trạng thái" và "Môi trường", mỗi ô có lựa chọn "Tất cả" (mặc định) cộng ba giá trị tương ứng. Tìm kiếm và hai bộ lọc kết hợp theo **AND**.
+5. **AC5 – Số lượng và trạng thái rỗng:** luôn hiển thị "Hiển thị X / N máy chủ" (X sau khi lọc, N tổng). Khi X = 0 mà N > 0 hiển thị "Không tìm thấy máy chủ phù hợp" kèm nút "Xóa bộ lọc" đưa ô tìm kiếm và hai bộ lọc về mặc định. Khi N = 0 hiển thị "Chưa có máy chủ nào" (không có nút "Xóa bộ lọc", không ném lỗi).
+6. **AC6 – Xem chi tiết:** bấm vào tên máy chủ trên danh sách mở màn hình chi tiết của máy chủ đó, hiển thị đủ mọi trường: tên, id, hostname, địa chỉ IP, hệ điều hành, môi trường, trạng thái (nhãn tiếng Việt) và mô tả. Máy chủ không có `description` hiển thị "Không có mô tả". Dữ liệu chi tiết lấy qua `serverRepository.getById(id)`.
+7. **AC7 – Quay lại danh sách:** màn hình chi tiết có nút "Quay lại danh sách"; bấm thì trở về danh sách và **giữ nguyên** nội dung tìm kiếm và bộ lọc đang chọn trước đó. Nếu `getById` trả `undefined` (id không còn tồn tại) hiển thị "Không tìm thấy máy chủ" kèm nút "Quay lại danh sách", không sập ứng dụng.
+8. **AC8 – Kiến trúc và quy ước:** logic lọc là hàm thuần `filterServers` trong `src/domain/` (không đổi mảng đầu vào, giữ thứ tự), có test riêng. UI **không** import `servers.json`, chỉ đi qua repository; component trình bày nhận dữ liệu qua props, không tự gọi repository. TypeScript `strict`, không dùng `any`, không thêm thư viện runtime mới.
+9. **AC9 – Khả năng truy cập cơ bản:** danh sách dùng thẻ bảng chuẩn (`<table>`, `<th scope="col">`); mỗi ô nhập/chọn có `<label>` gắn đúng; tên máy chủ mở chi tiết là phần tử tương tác được bằng bàn phím (`<button>`). Nhờ vậy test truy vấn được theo role/label.
+10. **AC10 – Test và chất lượng:** `npm test`, `npm run lint`, `npm run build` đều đạt. Có test cho: `filterServers` (từng điều kiện và kết hợp), `serverLabels` (mọi giá trị enum đều có nhãn), `ServerList` (render, lọc, trạng thái rỗng, xóa bộ lọc, bấm tên), `ServerDetail` (đủ trường, không mô tả, không tìm thấy, quay lại), `App` (luồng danh sách → chi tiết → quay lại giữ bộ lọc; id không tồn tại; repository rỗng). Có **ít nhất một test `App` không mock** chạy trên `servers.json` thật, kỳ vọng "Đã tải 3 máy chủ" (`src/App.integration.test.tsx`).
 
-## Ghi chú kỹ thuật
+## Nhiệm vụ / việc con
 
-- 
+- [x] **T1 – Nhãn hiển thị (AC2)**
+  - [x] Kiểm tra/tạo `src/domain/serverLabels.ts` xuất `STATUS_LABELS: Record<ServerStatus, string>` và `ENVIRONMENT_LABELS: Record<ServerEnvironment, string>` đúng nhãn ở AC2.
+  - [x] Test: mọi giá trị trong `SERVER_STATUSES`/`SERVER_ENVIRONMENTS` đều có nhãn không rỗng.
+- [x] **T2 – Logic lọc (AC3, AC4, AC8)**
+  - [x] Kiểm tra/tạo `src/domain/filterServers.ts`: `ServerFilters { query; status: ServerStatus | 'all'; environment: ServerEnvironment | 'all' }`, hằng `DEFAULT_FILTERS`, hàm thuần `filterServers(servers, filters): Server[]`.
+  - [x] Test `filterServers.test.ts`: query khớp tên/hostname/IP; không phân biệt hoa/thường; trim; query rỗng/khoảng trắng; lọc status; lọc environment; kết hợp AND; không khớp → mảng rỗng; không tìm theo trường ngoài; không đổi mảng đầu vào.
+- [x] **T3 – Thành phần danh sách (AC1, AC3, AC4, AC5, AC9)**
+  - [x] Kiểm tra/tạo `src/components/ServerList.tsx`: ô tìm kiếm, hai ô chọn có `<label>`, dòng "Hiển thị X / N máy chủ", bảng 5 cột, các trạng thái rỗng, nút "Xóa bộ lọc"; tên máy chủ là `<button>` gọi `onSelect(server.id)`. Giữ nút "Thêm máy chủ" (`onCreate`) do 1.3 thêm.
+  - [x] Test `ServerList.test.tsx` (không cần repository): đủ dòng/cột theo thứ tự; label và mặc định "Tất cả"; lọc AND; không khớp → "Không tìm thấy máy chủ phù hợp" + "Xóa bộ lọc" đưa cả 3 điều khiển về mặc định; danh sách rỗng → "Chưa có máy chủ nào" và không có nút xóa bộ lọc; nhãn không lộ giá trị thô; bấm tên → `onSelect` đúng id.
+- [x] **T4 – Thành phần chi tiết (AC6, AC7, AC9)**
+  - [x] Kiểm tra/tạo `src/components/ServerDetail.tsx` nhận `server: Server | undefined` và `onBack`: đủ trường trong `<dl>`, "Không có mô tả", hoặc "Không tìm thấy máy chủ"; nút "Quay lại danh sách". Giữ nút Sửa/Xóa và xác nhận xóa do 1.3/2.2 thêm.
+  - [x] Test `ServerDetail.test.tsx`: đủ trường; không mô tả; `undefined`; bấm quay lại → `onBack`.
+- [x] **T5 – Ghép trong App (AC1, AC6, AC7, AC8)**
+  - [x] Kiểm tra `src/App.tsx`: giữ tiêu đề "ISS – Quản lý máy chủ" và "Đã tải N máy chủ"; `filters` (khởi tạo `DEFAULT_FILTERS`) nằm ở `App`, ngoài nhánh render theo màn hình, để quay lại không mất bộ lọc; chi tiết lấy qua `repository.getById`; chỉ import repository, không import `servers.json`.
+- [x] **T6 – Test App (AC7, AC10)**
+  - [x] `src/App.test.tsx` (mock repository, dữ liệu `Server` đầy đủ): tiêu đề; "Đã tải N máy chủ"; danh sách; luồng gõ tìm kiếm + chọn trạng thái → bấm tên → chi tiết (`getById` được gọi đúng id) → "Quay lại danh sách" → ô tìm kiếm và bộ lọc còn nguyên; id không tồn tại → "Không tìm thấy máy chủ" và vẫn quay lại được; repository rỗng → "Chưa có máy chủ nào".
+  - [x] `src/App.integration.test.tsx` (không mock): "Đã tải 3 máy chủ", thấy đủ 3 tên mẫu, "Hiển thị 3 / 3 máy chủ"; mở "Máy build" thấy "Windows Server 2022", "Không có mô tả", "Ngừng hoạt động".
+- [x] **T7 – Tồn đọng nhỏ của 1.1 (V2 của QA 1.1)**
+  - [x] Xác nhận `package.json` có `"engines": { "node": ">=20.19" }` (đã có; không cần làm lại).
+- [x] **T8 – Hoàn tất (AC10)**
+  - [x] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt bằng Node ≥ 20.19.
+  - [x] Ghi kết quả và bằng chứng theo từng AC vào Dev Agent Record; đổi trạng thái story sang `review` trong `sprint-status.yaml` chỉ khi SM yêu cầu làm lại (xem lưu ý hiện trạng).
+
+## Ghi chú cho Dev
+
+### Căn cứ và giả định
+
+- `docs/bmad-office/epics.md`, `prd.md`, `architecture.md` hiện vẫn là **khung rỗng** (epics.md chỉ có "Epic 1 – Story 1.1: " trống); story dựa trên `docs/bmad-office/yeu-cau/yeu-cau-001.md`, kiến trúc thực tế rút ra từ mã của story 1.1 và quyết định của người dùng ở trên. Các quy ước "từ kiến trúc" dưới đây là quy ước đã thiết lập trong mã sprint 1. Nếu Architect/PM cập nhật tài liệu mâu thuẫn với story này, báo lại Scrum Master, không tự đổi hướng.
+- **Giả định của SM (cần PM xác nhận):** các nhãn tiếng Việt ở AC2; tìm kiếm trên tên/hostname/IP; không lưu bộ lọc qua lần tải lại trang; có nút "Xóa bộ lọc".
+- Chưa có thiết kế giao diện: HTML ngữ nghĩa gọn gàng, CSS tối thiểu (`src/App.css`). Không dùng UI kit.
+- **Đường dẫn:** đề bài yêu cầu `docs/stories/1.2.story.md`, nhưng quy ước thật của repo là `docs/bmad-office/story-x.y.md` và `docs/bmad-office/sprint-status.yaml` (không có `docs/sprint-status.yaml`). Nội dung được ghi ở cả hai chỗ, giữ đồng bộ.
+
+### Tệp cần tạo / sửa (đối chiếu với mã hiện có)
+
+| Tệp | Hiện trạng / hành động |
+|---|---|
+| `src/domain/serverLabels.ts` (+ `.test.ts`) | Đã có – kiểm tra theo T1 |
+| `src/domain/filterServers.ts` (+ `.test.ts`) | Đã có – kiểm tra theo T2 |
+| `src/components/ServerList.tsx` (+ `.test.tsx`) | Đã có (đã thêm `onCreate` từ 1.3) – kiểm tra theo T3 |
+| `src/components/ServerDetail.tsx` (+ `.test.tsx`) | Đã có (đã thêm sửa/xóa/`installedCount` từ 1.3, 2.2) – kiểm tra theo T4 |
+| `src/App.tsx`, `src/App.test.tsx` | Đã có, đã mở rộng bởi 1.3 và Epic 2 – kiểm tra theo T5, T6 |
+| `src/App.integration.test.tsx` | Đã có – kiểm tra theo T6 |
+| `src/App.css` | Đang `M` (chưa commit); chỉ chỉnh style nếu cần |
+
+Không sửa `types/server.ts`, `validateServer.ts`, `serverRepository.ts`, `servers.json` (nếu cần đổi, báo lại Scrum Master). Không sửa `docs/` ngoài mục Dev Agent Record của tệp story này. **Không thu nhỏ** `App.tsx`/component về phạm vi chỉ đọc; chỉ bảo đảm hành vi AC1–AC10 vẫn đúng trong ứng dụng hiện tại (nếu lệch, ghi vào Dev Agent Record).
+
+### Quy ước (từ kiến trúc story 1.1)
+
+- TypeScript `strict`; cấm `any` (ESLint `no-explicit-any: error`); dùng `unknown` ở ranh giới dữ liệu.
+- Tách lớp `types` → `domain` (hàm thuần) → `repositories` → UI (`components`, `App`). Chỉ `App` đọc repository; component trình bày nhận dữ liệu qua props.
+- Test đặt cạnh mã nguồn, tên `*.test.ts(x)`; Vitest + Testing Library + `@testing-library/jest-dom` (cấu hình ở `src/test/setup.ts`); ưu tiên truy vấn theo role/label.
+- Nhãn giao diện tiếng Việt; tên mã (biến, hàm, kiểu) tiếng Anh.
+- Không thêm router, state manager, UI kit; chỉ dùng React hooks.
+- ESLint `react-refresh`: mỗi tệp component chỉ xuất component; hằng/hàm dùng chung đặt ở `domain/`.
+
+### Lưu ý môi trường và repo
+
+- Máy mặc định dùng Node 10 (quá cũ). Dùng Node **≥ 20.19** (ví dụ v22.13.0 trong nvm) cho từng lệnh.
+- **Nợ kỹ thuật (V1 của QA 1.1/1.2):** các tệp cấu hình/types/data của 1.1 vẫn chưa commit (`.gitignore`, `eslint.config.js`, `index.html`, `package-lock.json`, `src/data/servers.json`, `src/main.tsx`, `src/test/setup.ts`, `src/types/server.ts`, `src/vite-env.d.ts`, `tsconfig*.json`, `vite.config.ts`), nên `HEAD` không build được. Không xóa/ghi đè; Dev/điều phối commit đủ khi bàn giao.
+- Mức Thấp từ QA 1.2 (không bắt buộc ở story này): test chậm do khởi tạo jsdom nhiều lần (có thể cân nhắc `pool: 'vmThreads'`); `<h2>` tên và dòng "Tên" trong `<dl>` lặp; chưa quản lý focus khi chuyển danh sách ↔ chi tiết.
+
+### Lệnh
+
+```
+npm install
+npm run dev      # xem thử: danh sách 3 máy chủ, tìm kiếm/lọc, chi tiết
+npm run lint
+npm run build    # tsc -b && vite build
+npm test         # vitest run
+```
+
+### Definition of Done
+
+Mọi ô nhiệm vụ đã đánh dấu; `lint`, `build`, `test` đều đạt; AC1–AC10 có bằng chứng trong Dev Agent Record; mọi tệp của story đã được commit; sau đó chuyển story sang `review` để QA (Linh Y Tiên Tử) kiểm thử.
+
+## Dev Agent Record
+
+- **Dev:** Kiếm Thánh · Developer (Amelia) – 2026-11-15
+- **Phương pháp:** mã của 1.2 đã có sẵn (commit `feat(story-1.2)`, QA PASS) và được 1.3, 2.1–2.3 mở rộng. Theo ghi chú hiện trạng của story, Dev **không dựng lại**, mà đối chiếu từng AC với mã và test hiện có. Kết quả: **không phát hiện chỗ lệch nào, không cần sửa mã nguồn hay test** nên không có tệp mã nào được tạo/sửa trong lượt này. Các nút Thêm/Sửa/Xóa/cài đặt do story sau thêm vào được giữ nguyên.
+- **Môi trường:** Node v22.13.0 (nvm). Máy mặc định Node 10 nên `npm` phải chạy với `PATH` trỏ tới Node 22.
+
+### Lệnh đã chạy và kết quả
+
+| Lệnh | Kết quả |
+|---|---|
+| `npm run lint` | Đạt, 0 lỗi |
+| `npm run build` (`tsc -b && vite build`) | Đạt (39 module, `dist/` được tạo) |
+| `npm test` (`vitest run`) | Đạt: 24 tệp, **331/331 test** (~155 giây do khởi tạo jsdom từng tệp, xem lưu ý) |
+
+### Bằng chứng theo AC
+
+| AC | Bằng chứng (mã → test) |
+|---|---|
+| AC1 | `ServerList.tsx` render bảng 5 cột theo thứ tự repository; `App.tsx` giữ "Đã tải N máy chủ" → `ServerList.test` "hiển thị đủ cột và đủ dòng theo thứ tự đầu vào"; `App.integration.test` thấy 3 máy chủ mẫu |
+| AC2 | `serverLabels.ts` (`STATUS_LABELS`, `ENVIRONMENT_LABELS`); trạng thái luôn có chữ → `serverLabels.test` (3 test), `ServerList.test` "không lộ giá trị thô" |
+| AC3 | `filterServers.ts`: trim + `toLowerCase`, chỉ so tên/hostname/IP → `filterServers.test` (khớp từng trường, hoa/thường, trim, query rỗng, không tìm trường ngoài) |
+| AC4 | Hai `<select>` có "Tất cả" mặc định; kết hợp AND trong `filterServers` → `filterServers.test` "kết hợp … AND", `ServerList.test` "kết hợp tìm kiếm và bộ lọc theo AND", "các ô nhập/chọn có label … mặc định Tất cả" |
+| AC5 | Dòng "Hiển thị X / N máy chủ"; "Không tìm thấy máy chủ phù hợp" + "Xóa bộ lọc"; "Chưa có máy chủ nào" khi N = 0 → `ServerList.test` (3 test tương ứng), `App.test` "repository rỗng …" |
+| AC6 | `ServerDetail.tsx` hiển thị đủ 8 trường trong `<dl>`, "Không có mô tả"; `App` lấy qua `repository.getById` → `ServerDetail.test` "đủ mọi trường", "Không có mô tả"; `App.integration.test` "Máy build" thấy "Windows Server 2022", "Không có mô tả", "Ngừng hoạt động" |
+| AC7 | `filters` là state của `App`, ngoài nhánh render theo màn hình; nút "Quay lại danh sách"; `getById` → `undefined` hiện "Không tìm thấy máy chủ" → `App.test` "luồng danh sách → chi tiết → quay lại giữ nguyên bộ lọc", "id không còn tồn tại …"; `ServerDetail.test` (undefined, quay lại) |
+| AC8 | `filterServers` là hàm thuần ở `src/domain/`, không đổi mảng đầu vào; chỉ `repositories/serverRepository.ts` import `servers.json` (UI không import); component nhận props; không có `any` (grep), không thêm thư viện runtime (chỉ react, react-dom) → `filterServers.test` "không làm thay đổi mảng đầu vào" |
+| AC9 | `<table>`, `<th scope="col">`, `<label htmlFor>` cho 3 ô, tên máy chủ là `<button>`; test truy vấn theo role/label |
+| AC10 | `lint`, `build`, `test` đạt (bảng trên); đủ test cho `filterServers`, `serverLabels`, `ServerList`, `ServerDetail`, `App`; có `App.integration.test.tsx` không mock chạy trên `servers.json` thật ("Đã tải 3 máy chủ") |
+
+T7: `package.json` đã có `"engines": { "node": ">=20.19" }`.
+
+### Tệp tạo/sửa
+
+- Mã nguồn / test: **không đổi** (không có sai lệch với AC).
+- Tài liệu: `docs/stories/1.2.story.md` (đánh dấu việc con, trạng thái → Review, Dev Agent Record), bản sao `docs/bmad-office/story-1.2.md` (đồng bộ), `docs/bmad-office/sprint-status.yaml` (1.2 → review).
+
+### Lưu ý cho QA / SM
+
+- **Nợ kỹ thuật V1 (chưa xử lý, ngoài quyền của Dev):** các tệp cấu hình/types/data của 1.1 (`.gitignore`, `eslint.config.js`, `index.html`, `package-lock.json`, `src/data/servers.json`, `src/main.tsx`, `src/test/setup.ts`, `src/types/server.ts`, `src/vite-env.d.ts`, `tsconfig*.json`, `vite.config.ts`) cùng `src/App.css` và vài test vẫn untracked/modified theo `git status`, nên `HEAD` chưa build được. Theo quy tắc, Dev không dùng git; cần ứng dụng tự commit đủ khi bàn giao.
+- Mức Thấp từ QA 1.2 (không bắt buộc): test chậm (jsdom khởi tạo 24 lần, ~329 giây tổng; có thể thử `pool: 'vmThreads'`); `<h2>` tên và dòng "Tên" trong `<dl>` lặp nội dung; chưa quản lý focus khi chuyển danh sách ↔ chi tiết. Không xử lý vì ngoài phạm vi AC.
+- Các giả định của SM (nhãn tiếng Việt, trường tìm kiếm, không lưu bộ lọc, nút "Xóa bộ lọc") vẫn cần PM xác nhận; không đổi.
+- Tài liệu `architecture.md` vẫn là khung rỗng; Dev dựa vào quy ước kiến trúc trong story 1.1/1.2.
+
+**Bàn giao:** Linh Y Tiên Tử · QA Engineer kiểm thử lại story 1.2 (trạng thái `review`).
+
+## QA Results
+
+- **QA:** Linh Y Tiên Tử · QA Engineer (Quinn) – 2026-11-15
+- **Kết luận:** **ĐẠT (PASS)** – AC1–AC10 đều đạt; trạng thái story → **Done**. Báo cáo đầy đủ: `docs/qa/qa-1.2.md`.
+- **Kết quả chạy (Node 22.13.0):** `npm run lint` exit 0; `npm run build` exit 0 (39 module); `npm test` 24/24 tệp, **331/331 test** đạt (~301 s).
+- **Vấn đề:** V1 (Trung bình) các tệp cấu hình/types/data của 1.1 và `App.css` vẫn chưa commit nên HEAD chưa build được, cần ứng dụng commit đủ, SM kiểm `git status` trước 2.3; V2–V4 (Thấp) test chậm do jsdom khởi tạo 24 lần, `App.test` chỉ mock `serverRepository`, chưa có `aria-live` cho dòng số lượng và quản lý focus; V5 (Thông tin) giả định SM chờ PM xác nhận.
+- **Không có bug report** (`bug-1.2.md`). Bàn giao: Thiết Tướng · Scrum Master.

@@ -75,11 +75,11 @@ stories:
   "1.2":
     epic: "1"
     title: "Danh sách, tìm kiếm/lọc và xem chi tiết máy chủ"
-    status: review
+    status: done
     sprint: 1
     order: 2
     depends_on: ["1.1"]
-    note: "Dev (Kiếm Thánh) 2026-11-15: đã đối chiếu mã với AC1-AC10, không cần sửa mã/test; lint/build/test đạt (Node 22.13.0, 331/331 test); Dev Agent Record đã điền trong docs/stories/1.2.story.md (bản sao docs/bmad-office/story-1.2.md) -> chuyển review chờ QA. Còn mở: các tệp cấu hình/types/data của 1.1 vẫn untracked (xem blockers). Lịch sử: Story 1.2 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.2.story.md, bản sao docs/bmad-office/story-1.2.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.2) + test(story-1.2): QA PASS. Màn danh sách/chi tiết là nơi 2.2 hiển thị bản ghi cài đặt. Nhãn tiếng Việt và trường tìm kiếm là giả định của SM, cần PM xác nhận."
+    note: "QA (Linh Y Tiên Tử) 2026-11-15: PASS, AC1-AC10 đạt (lint/build đạt, 331/331 test, Node 22.13.0); báo cáo docs/qa/qa-1.2.md (bản sao docs/bmad-office/qa-1.2.md); story -> Done. Còn lưu ý V1: các tệp cấu hình/types/data của 1.1 và App.css chưa commit -> chờ ứng dụng tự commit, SM kiểm git status trước 2.3. Dev (Kiếm Thánh) 2026-11-15: đã đối chiếu mã với AC1-AC10, không cần sửa mã/test; lint/build/test đạt (Node 22.13.0, 331/331 test); Dev Agent Record đã điền trong docs/stories/1.2.story.md (bản sao docs/bmad-office/story-1.2.md) -> chuyển review chờ QA. Còn mở: các tệp cấu hình/types/data của 1.1 vẫn untracked (xem blockers). Lịch sử: Story 1.2 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.2.story.md, bản sao docs/bmad-office/story-1.2.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.2) + test(story-1.2): QA PASS. Màn danh sách/chi tiết là nơi 2.2 hiển thị bản ghi cài đặt. Nhãn tiếng Việt và trường tìm kiếm là giả định của SM, cần PM xác nhận."
   "1.3":
     epic: "1"
     title: "Thêm, sửa, xóa máy chủ và lưu dữ liệu vào localStorage"
