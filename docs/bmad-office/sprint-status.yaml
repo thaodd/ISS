@@ -1,6 +1,10 @@
 # sprint-status.yaml — Kế hoạch sprint cho ISS
 # Người lập: Thiết Tướng (Scrum Master). Cập nhật: 2026-11-15.
 #
+# Rà soát lại lúc lập kế hoạch sprint 2 (2026-11-15): đối chiếu git log + working tree, trạng thái bên dưới vẫn đúng
+#   (2.1 có feat + QA PASS; 2.2 có feat, chưa có commit QA PASS; 2.3 chưa có story/mã). Tệp kế hoạch nằm ở
+#   docs/bmad-office/sprint-status.yaml (không có docs/sprint-status.yaml) theo quy ước các story trước.
+#
 # Trạng thái hợp lệ: backlog | ready | in-progress | review | done
 #   backlog     : đã có story nhưng chưa đủ nội dung (thiếu mô tả / tiêu chí nghiệm thu) để Dev làm
 #   ready       : story đã đủ ngữ cảnh, Dev có thể nhận
