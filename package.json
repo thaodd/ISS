@@ -7,10 +7,16 @@
     "node": ">=20.19"
   },
   "scripts": {
+    "check-node": "node scripts/check-node.cjs",
+    "predev": "node scripts/check-node.cjs",
     "dev": "vite",
+    "prebuild": "node scripts/check-node.cjs",
     "build": "tsc -b && vite build",
+    "prelint": "node scripts/check-node.cjs",
     "lint": "eslint .",
+    "prepreview": "node scripts/check-node.cjs",
     "preview": "vite preview",
+    "pretest": "node scripts/check-node.cjs",
     "test": "vitest run"
   },
   "dependencies": {
