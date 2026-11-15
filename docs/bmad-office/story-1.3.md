@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Review
+- **Trạng thái:** Done
 - **Phụ thuộc:** Story 1.1 (Done) và Story 1.2 (Done) – dùng lại `Server`, `validateServer`, `serverRepository`, `ServerList`, `ServerDetail`, `App`
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -201,3 +201,13 @@ npm test        -> 11 tệp, 136 test đều đạt (trước story: 75 test)
 - Chưa xem thử giao diện trên trình duyệt thật (`npm run dev`); luồng UI chỉ được kiểm bằng test jsdom.
 
 ## QA Results
+
+- **QA:** Linh Y Tiên Tử (Quinn) · 2026-11-15 · Node v22.13.0 · báo cáo đầy đủ: `qa-1.3.md`
+- **Kết luận:** ĐẠT, AC1–AC13 đều đạt; trạng thái story chuyển sang Done.
+- QA tự chạy lại: `npm run lint` đạt; `npm run build` đạt; `npm test` 11 tệp, 136/136 test đạt.
+- Vấn đề còn lại (không chặn):
+  - V1 (Trung bình): tệp cấu hình/types/data của 1.1 vẫn untracked và `src/App.css` chưa commit, HEAD không build được trên bản clone mới; người điều phối cần commit đủ.
+  - V2 (Thấp): lỗi biểu mẫu không tự xóa khi gõ lại, chưa quản lý focus.
+  - V3 (Thấp): test chậm ~76 giây do jsdom khởi tạo 11 lần.
+  - V4 (Thấp): id max+1 có thể dùng lại id đã xóa (giả định đã ghi), cần PM xác nhận.
+  - V5, V6 (Thấp): câu chữ lỗi còn tên trường tiếng Anh; chưa thử trên trình duyệt thật.
