@@ -24,7 +24,7 @@ sprint_goal: "Hoàn thành Epic 1 (quản lý thông tin máy chủ) từ story 
 
 # Cổng chuyển backlog -> ready: story-x.y.md phải có (1) mô tả "Là một… tôi muốn… để…",
 # (2) tiêu chí nghiệm thu cụ thể, (3) ghi chú kỹ thuật bám architecture.md.
-# Hiện story 1.1 (done) và 1.2 (done) đã qua cổng này (cập nhật 2026-11-15); 4 story còn lại chưa qua.
+# Hiện story 1.1 (done), 1.2 (done) và 1.3 (ready) đã qua cổng này (cập nhật 2026-11-15); 3 story còn lại (2.1-2.3) chưa qua.
 
 epics:
   "1":
@@ -60,12 +60,12 @@ stories:
     note: "QA đạt 2026-11-15 (qa-1.2.md): AC1-AC10 đạt, QA chạy lại lint/build/test (75 test, Node 22.13.0) đều đạt. Đã xử lý V2 (engines) và V3 (test App không mock) của qa-1.1. Còn: V1 mã 1.1 + 1.2 chưa commit đủ nên HEAD không build được (Trung bình); jsdom khởi tạo lại 8 lần làm test chậm ~51 giây (Thấp); chưa quản lý focus khi chuyển danh sách/chi tiết (Thấp). Nhãn tiếng Việt và trường tìm kiếm là giả định của SM, cần PM xác nhận."
   "1.3":
     epic: "1"
-    title: "Story 1.3"
-    status: backlog
+    title: "Thêm, sửa, xóa máy chủ và lưu dữ liệu vào localStorage"
+    status: ready
     sprint: 1
     order: 3
     depends_on: ["1.2"]
-    note: "Làm sau 1.2. story-1.3.md còn là khung rỗng."
+    note: "Story đã soạn đủ 2026-11-15 (story-1.3.md, AC1-AC13, T1-T8). Người dùng đã chốt: lưu localStorage, đủ Thêm+Sửa+Xóa, id tự sinh, xóa có xác nhận trong trang. Giả định của SM cần PM xác nhận: định dạng id srv-NNN (max+1), mặc định biểu mẫu thêm, không bắt buộc hostname/IP duy nhất, khóa iss.servers.v1, không hoàn tác khi xóa."
   "2.1":
     epic: "2"
     title: "Story 2.1"
@@ -94,6 +94,6 @@ stories:
 # Rủi ro / việc cần xử lý trước khi Dev bắt đầu sprint 1
 blockers:
   - "epics.md, prd.md, architecture.md chưa có nội dung -> PM/Architect cần hoàn thiện trước; Scrum Master không tự bịa yêu cầu."
-  - "Story 1.1 đã Done (QA đạt, qa-1.1.md). Máy mặc định dùng Node 10, cần chuyển sang Node >= 20.19 (ví dụ v22.13.0 trong nvm). 5 story còn lại vẫn là khung; Scrum Master sẽ soạn tiếp 1.2 -> 1.3 khi epics.md có nội dung."
+  - "Story 1.1 đã Done (QA đạt, qa-1.1.md). Máy mặc định dùng Node 10, cần chuyển sang Node >= 20.19 (ví dụ v22.13.0 trong nvm). Story 1.3 đã Ready; 3 story còn lại (2.1-2.3) vẫn là khung, thuộc sprint 2."
   - "Story 1.1 + 1.2: các tệp cấu hình/types/data (.gitignore, eslint.config.js, index.html, package-lock.json, src/data, src/main.tsx, src/test, src/types, src/vite-env.d.ts, tsconfig*.json, vite.config.ts) vẫn untracked -> HEAD không build được; cần commit đủ (qa-1.1.md V1, qa-1.2.md V1)."
   - "Story 1.2 đã Done (QA đạt, qa-1.2.md). qa-1.3 ... qa-2.3 vẫn là báo cáo 'mô phỏng', chưa có test thật; chỉ qa-1.1.md và qa-1.2.md là kiểm thử thật."
