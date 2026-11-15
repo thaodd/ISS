@@ -32,7 +32,7 @@ previous_sprints:
 
 # Cổng chuyển backlog -> ready: story-x.y.md phải có (1) mô tả "Là một… tôi muốn… để…",
 # (2) tiêu chí nghiệm thu cụ thể, (3) ghi chú kỹ thuật bám architecture.md.
-# Hiện story 1.1-1.3 (done) đã qua cổng này; 3 story của sprint 2 (2.1-2.3) CHƯA qua, nên để backlog cho tới khi Scrum Master chạy Create Story từng story (theo thứ tự order).
+# Hiện story 1.1-1.3 (done) và 2.1 (ready) đã qua cổng này; 2.2 và 2.3 CHƯA qua, nên để backlog cho tới khi Scrum Master chạy Create Story từng story (theo thứ tự order).
 
 epics:
   "1":
@@ -77,11 +77,11 @@ stories:
   "2.1":
     epic: "2"
     title: "Danh mục ứng dụng (thêm, sửa, xóa, xem) và lưu localStorage"
-    status: backlog
+    status: ready
     sprint: 2
     order: 4
     depends_on: []
-    note: "Độc lập với dữ liệu máy chủ; chỉ dùng khung dự án và mẫu repository từ 1.1-1.3 (đã done). Là nền cho 2.2. Việc tiếp theo: Scrum Master chạy Create Story 2.1 (story-2.1.md còn là khung mô phỏng) rồi mới chuyển ready. Giả định cần PM xác nhận: trường ứng dụng (tên, nhà cung cấp, mô tả), khóa localStorage riêng (ví dụ iss.apps.v1), id dạng app-NNN, tên ứng dụng không trùng."
+    note: "Story đã soạn đủ 2026-11-15 (story-2.1.md, AC1-AC19, T1-T7), Dev nhận được ngay. Độc lập với dữ liệu máy chủ; chỉ dùng khung dự án và mẫu repository từ 1.1-1.3 (đã done). Là nền cho 2.2. Giả định của SM cần PM xác nhận: trường ứng dụng (id, name, vendor bắt buộc; description tùy chọn), khóa localStorage iss.apps.v1, id dạng app-NNN (max+1, có thể dùng lại id đã xóa), tên ứng dụng không trùng (không phân biệt hoa/thường), 3 ứng dụng mẫu applications.json, điều hướng bằng hai nút Máy chủ/Ứng dụng trong App (không router). Chỉ sửa App.tsx/App.css của Epic 1, các tệp Server* giữ nguyên."
   "2.2":
     epic: "2"
     title: "Ghi nhận ứng dụng đã cài trên máy chủ (gán ứng dụng vào máy chủ)"
@@ -102,8 +102,8 @@ stories:
 # Rủi ro / việc cần xử lý trước khi Dev bắt đầu sprint 2
 blockers:
   - "epics.md, prd.md, architecture.md vẫn là khung rỗng -> PM/Architect cần hoàn thiện; Scrum Master không tự bịa yêu cầu. Phạm vi Epic 2 đã được người dùng chốt (xem GHI CHÚ NGUỒN), nhưng architecture.md chưa mô tả mô hình dữ liệu ứng dụng/cài đặt -> Architect bổ sung hoặc xác nhận khi Create Story 2.1/2.2."
-  - "Sprint 2 chưa có story nào ở trạng thái ready: 2.1-2.3 đều backlog (story-*.md là khung). Dev chưa nhận việc được cho tới khi Create Story 2.1 xong."
+  - "Story 2.1 đã ready (Dev nhận được). 2.2 và 2.3 còn backlog (story-2.2.md, story-2.3.md là khung); Scrum Master soạn khi 2.1 xong và cần chốt phương án xóa ứng dụng/máy chủ đối với bản ghi cài đặt cho 2.2."
   - "Máy mặc định dùng Node 10; cần Node >= 20.19 (ví dụ v22.13.0 trong nvm) để chạy lint/build/test."
-  - "Nợ kỹ thuật sprint 1 (qa-1.1 V1, qa-1.2 V1, qa-1.3 V1): các tệp cấu hình/types/data (.gitignore, eslint.config.js, index.html, package-lock.json, src/data, src/main.tsx, src/test, src/types, src/vite-env.d.ts, tsconfig*.json, vite.config.ts) và src/App.css chưa commit -> HEAD không build được. Cần commit đủ trước khi Dev bắt đầu 2.1."
+  - "Nợ kỹ thuật sprint 1 (qa-1.1 V1, qa-1.2 V1, qa-1.3 V1): các tệp cấu hình/types/data (.gitignore, eslint.config.js, index.html, package-lock.json, src/data, src/main.tsx, src/test/setup.ts, src/types, src/vite-env.d.ts, tsconfig*.json, vite.config.ts) và src/App.css vẫn chưa commit (git status 2026-11-15) -> HEAD không build được. Cần commit đủ trước khi Dev bắt đầu 2.1; 2.1 sẽ thêm tệp mới vào src/types và src/data nên nợ này càng nên xử lý trước."
   - "Mức Thấp từ QA sprint 1: test chậm (~76 giây), lỗi biểu mẫu không tự xóa khi gõ lại, chưa quản lý focus, id máy chủ max+1 có thể dùng lại id đã xóa. Điểm cuối ảnh hưởng 2.2: bản ghi cài đặt tham chiếu serverId nên id tái sử dụng có thể trỏ nhầm máy chủ -> cân nhắc khi soạn story 2.2."
   - "qa-2.1 ... qa-2.3 vẫn là báo cáo 'mô phỏng', chưa có test thật; qa-1.1, qa-1.2, qa-1.3 là kiểm thử thật."
