@@ -1,0 +1,73 @@
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+.server-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.server-filters label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #0b5cad;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.status {
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.status-online {
+  background: #d7f5dd;
+}
+
+.status-offline {
+  background: #f7d7d7;
+}
+
+.status-maintenance {
+  background: #fdf0c4;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1rem;
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+}

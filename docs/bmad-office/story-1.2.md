@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Ready
+- **Trạng thái:** Review
 - **Phụ thuộc:** Story 1.1 (Done) – dùng lại kiểu `Server`, `serverRepository`, `validateServer`
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -38,32 +38,32 @@ Là một **quản trị viên hạ tầng của ISS**, tôi muốn **xem danh s
 
 ## Nhiệm vụ / việc con
 
-- [ ] **T1 – Nhãn hiển thị (AC2)**
-  - [ ] Tạo `src/domain/serverLabels.ts` xuất `STATUS_LABELS: Record<ServerStatus, string>` và `ENVIRONMENT_LABELS: Record<ServerEnvironment, string>` theo AC2.
-  - [ ] Test: mọi giá trị trong `SERVER_STATUSES`/`SERVER_ENVIRONMENTS` đều có nhãn không rỗng.
-- [ ] **T2 – Logic lọc (AC3, AC4, AC8)**
-  - [ ] Tạo `src/domain/filterServers.ts`: `ServerFilters { query: string; status: ServerStatus | 'all'; environment: ServerEnvironment | 'all' }`, hằng `DEFAULT_FILTERS`, hàm `filterServers(servers, filters): Server[]` (thuần, không đổi mảng đầu vào, giữ thứ tự).
-  - [ ] Test `filterServers.test.ts`: query khớp tên/hostname/IP; không phân biệt hoa/thường; trim; query rỗng/khoảng trắng; lọc status; lọc environment; kết hợp AND; không khớp → mảng rỗng; không làm thay đổi mảng đầu vào.
-- [ ] **T3 – Thành phần danh sách (AC1, AC3, AC4, AC5, AC9)**
-  - [ ] Tạo `src/components/ServerList.tsx` nhận `servers`, `filters`, `onFiltersChange`, `onSelect(id)`; hiển thị ô tìm kiếm, hai ô chọn, dòng "Hiển thị X / N máy chủ", bảng, các trạng thái rỗng và nút "Xóa bộ lọc".
-  - [ ] Tên máy chủ là `<button>` gọi `onSelect(server.id)`.
-  - [ ] Test `ServerList.test.tsx` (không cần repository): render đủ dòng và cột; gõ tìm kiếm/đổi bộ lọc → gọi `onFiltersChange` hoặc cập nhật bảng đúng; không khớp → "Không tìm thấy máy chủ phù hợp" + "Xóa bộ lọc"; danh sách rỗng → "Chưa có máy chủ nào"; bấm tên → `onSelect` đúng id.
-- [ ] **T4 – Thành phần chi tiết (AC6, AC7, AC9)**
-  - [ ] Tạo `src/components/ServerDetail.tsx` nhận `server: Server | undefined` và `onBack`; hiển thị đủ trường (dùng `<dl>`), "Không có mô tả", hoặc "Không tìm thấy máy chủ"; nút "Quay lại danh sách".
-  - [ ] Test `ServerDetail.test.tsx`: đủ trường; không mô tả; `undefined`; bấm quay lại → `onBack`.
-- [ ] **T5 – Ghép trong App (AC1, AC6, AC7, AC8)**
-  - [ ] Sửa `src/App.tsx`: giữ tiêu đề "ISS – Quản lý máy chủ" và "Đã tải N máy chủ"; giữ `filters` (dùng `DEFAULT_FILTERS`) và `selectedId: string | null` bằng `useState`; `selectedId === null` → danh sách, ngược lại → chi tiết qua `serverRepository.getById`. Giữ `filters` ở `App` để quay lại không mất bộ lọc (AC7).
-  - [ ] Chỉ import `serverRepository`; không import `servers.json`.
-- [ ] **T6 – Test App (AC7, AC10)**
-  - [ ] Cập nhật `src/App.test.tsx`: mock repository hiện tại trả `{id:'x'}`, không còn đủ trường, phải đổi sang dữ liệu `Server` đầy đủ. Giữ hai test cũ (tiêu đề, "Đã tải 2 máy chủ").
-  - [ ] Thêm test luồng: gõ tìm kiếm → bấm tên → thấy chi tiết → "Quay lại danh sách" → ô tìm kiếm vẫn giữ giá trị và danh sách vẫn đã lọc.
-  - [ ] Thêm test id không tồn tại (mock `getById` trả `undefined`) → "Không tìm thấy máy chủ".
-  - [ ] Thêm **test không mock** (có thể tách `src/App.integration.test.tsx` để không dính `vi.mock` của tệp kia) kỳ vọng "Đã tải 3 máy chủ" và thấy 3 tên máy chủ mẫu.
-- [ ] **T7 – Dọn tồn đọng nhỏ của 1.1 (V2)**
-  - [ ] Thêm `"engines": { "node": ">=20.19" }` vào `package.json` (QA 1.1, V2).
-- [ ] **T8 – Hoàn tất (AC10)**
-  - [ ] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt (dùng Node ≥ 20.19).
-  - [ ] Ghi kết quả và bằng chứng theo AC vào mục Dev Agent Record, đổi trạng thái story sang Review.
+- [x] **T1 – Nhãn hiển thị (AC2)**
+  - [x] Tạo `src/domain/serverLabels.ts` xuất `STATUS_LABELS: Record<ServerStatus, string>` và `ENVIRONMENT_LABELS: Record<ServerEnvironment, string>` theo AC2.
+  - [x] Test: mọi giá trị trong `SERVER_STATUSES`/`SERVER_ENVIRONMENTS` đều có nhãn không rỗng.
+- [x] **T2 – Logic lọc (AC3, AC4, AC8)**
+  - [x] Tạo `src/domain/filterServers.ts`: `ServerFilters { query: string; status: ServerStatus | 'all'; environment: ServerEnvironment | 'all' }`, hằng `DEFAULT_FILTERS`, hàm `filterServers(servers, filters): Server[]` (thuần, không đổi mảng đầu vào, giữ thứ tự).
+  - [x] Test `filterServers.test.ts`: query khớp tên/hostname/IP; không phân biệt hoa/thường; trim; query rỗng/khoảng trắng; lọc status; lọc environment; kết hợp AND; không khớp → mảng rỗng; không làm thay đổi mảng đầu vào.
+- [x] **T3 – Thành phần danh sách (AC1, AC3, AC4, AC5, AC9)**
+  - [x] Tạo `src/components/ServerList.tsx` nhận `servers`, `filters`, `onFiltersChange`, `onSelect(id)`; hiển thị ô tìm kiếm, hai ô chọn, dòng "Hiển thị X / N máy chủ", bảng, các trạng thái rỗng và nút "Xóa bộ lọc".
+  - [x] Tên máy chủ là `<button>` gọi `onSelect(server.id)`.
+  - [x] Test `ServerList.test.tsx` (không cần repository): render đủ dòng và cột; gõ tìm kiếm/đổi bộ lọc → gọi `onFiltersChange` hoặc cập nhật bảng đúng; không khớp → "Không tìm thấy máy chủ phù hợp" + "Xóa bộ lọc"; danh sách rỗng → "Chưa có máy chủ nào"; bấm tên → `onSelect` đúng id.
+- [x] **T4 – Thành phần chi tiết (AC6, AC7, AC9)**
+  - [x] Tạo `src/components/ServerDetail.tsx` nhận `server: Server | undefined` và `onBack`; hiển thị đủ trường (dùng `<dl>`), "Không có mô tả", hoặc "Không tìm thấy máy chủ"; nút "Quay lại danh sách".
+  - [x] Test `ServerDetail.test.tsx`: đủ trường; không mô tả; `undefined`; bấm quay lại → `onBack`.
+- [x] **T5 – Ghép trong App (AC1, AC6, AC7, AC8)**
+  - [x] Sửa `src/App.tsx`: giữ tiêu đề "ISS – Quản lý máy chủ" và "Đã tải N máy chủ"; giữ `filters` (dùng `DEFAULT_FILTERS`) và `selectedId: string | null` bằng `useState`; `selectedId === null` → danh sách, ngược lại → chi tiết qua `serverRepository.getById`. Giữ `filters` ở `App` để quay lại không mất bộ lọc (AC7).
+  - [x] Chỉ import `serverRepository`; không import `servers.json`.
+- [x] **T6 – Test App (AC7, AC10)**
+  - [x] Cập nhật `src/App.test.tsx`: mock repository hiện tại trả `{id:'x'}`, không còn đủ trường, phải đổi sang dữ liệu `Server` đầy đủ. Giữ hai test cũ (tiêu đề, "Đã tải 2 máy chủ").
+  - [x] Thêm test luồng: gõ tìm kiếm → bấm tên → thấy chi tiết → "Quay lại danh sách" → ô tìm kiếm vẫn giữ giá trị và danh sách vẫn đã lọc.
+  - [x] Thêm test id không tồn tại (mock `getById` trả `undefined`) → "Không tìm thấy máy chủ".
+  - [x] Thêm **test không mock** (có thể tách `src/App.integration.test.tsx` để không dính `vi.mock` của tệp kia) kỳ vọng "Đã tải 3 máy chủ" và thấy 3 tên máy chủ mẫu.
+- [x] **T7 – Dọn tồn đọng nhỏ của 1.1 (V2)**
+  - [x] Thêm `"engines": { "node": ">=20.19" }` vào `package.json` (QA 1.1, V2).
+- [x] **T8 – Hoàn tất (AC10)**
+  - [x] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt (dùng Node ≥ 20.19).
+  - [x] Ghi kết quả và bằng chứng theo AC vào mục Dev Agent Record, đổi trạng thái story sang Review.
 
 ## Ghi chú cho Dev
 
@@ -119,7 +119,57 @@ Mọi ô nhiệm vụ đã đánh dấu; `lint`, `build`, `test` đều đạt; 
 
 ## Dev Agent Record
 
-_(để trống – Developer điền)_
+**Developer:** Kiếm Thánh (Amelia) · 2026-11-15 · Node v22.13.0
+
+### Tệp đã tạo / sửa
+
+| Tệp | Hành động |
+|---|---|
+| `src/domain/serverLabels.ts` (+ `.test.ts`) | Tạo – `STATUS_LABELS`, `ENVIRONMENT_LABELS` |
+| `src/domain/filterServers.ts` (+ `.test.ts`) | Tạo – `ServerFilters`, `DEFAULT_FILTERS`, `filterServers` (hàm thuần) |
+| `src/components/ServerList.tsx` (+ `.test.tsx`) | Tạo |
+| `src/components/ServerDetail.tsx` (+ `.test.tsx`) | Tạo |
+| `src/App.tsx` | Sửa – giữ `filters`, `selectedId` bằng `useState`; chỉ import `serverRepository` |
+| `src/App.test.tsx` | Sửa – mock dữ liệu `Server` đầy đủ; thêm test luồng, id không tồn tại, repo rỗng |
+| `src/App.integration.test.tsx` | Tạo – test không mock trên `servers.json` thật |
+| `src/App.css` | Tạo – CSS tối thiểu |
+| `package.json` | Sửa – thêm `"engines": { "node": ">=20.19" }` |
+| `docs/bmad-office/story-1.2.md`, `sprint-status.yaml` | Cập nhật trạng thái |
+
+Không sửa `types/server.ts`, `validateServer.ts`, `serverRepository.ts`, `servers.json`.
+
+### Lệnh đã chạy (Node v22.13.0)
+
+```
+npm run lint    -> đạt (0 lỗi, 0 cảnh báo)
+npm test        -> 8 tệp test, 75 test, tất cả đạt
+npm run build   -> tsc -b + vite build đạt (24 module)
+```
+
+### Bằng chứng theo AC
+
+| AC | Bằng chứng |
+|---|---|
+| AC1 | `ServerList.test.tsx` (đủ 5 cột, đủ dòng, đúng thứ tự); `App.integration.test.tsx` (3 máy chủ thật, "Đã tải 3 máy chủ"); `App.tsx` vẫn giữ dòng "Đã tải N máy chủ" |
+| AC2 | `serverLabels.test.ts`; `ServerList.test.tsx` kiểm tra nhãn tiếng Việt và không lộ giá trị thô; trạng thái luôn có chữ |
+| AC3 | `filterServers.test.ts` (tên/hostname/IP, hoa-thường, trim, rỗng/khoảng trắng); `ServerList.test.tsx` |
+| AC4 | `filterServers.test.ts` (status, environment, AND); `ServerList.test.tsx` (mặc định "Tất cả", kết hợp AND) |
+| AC5 | `ServerList.test.tsx`: "Hiển thị X / N", "Không tìm thấy máy chủ phù hợp" + "Xóa bộ lọc" đưa về mặc định, "Chưa có máy chủ nào" không có nút xóa; `App.test.tsx` repo rỗng |
+| AC6 | `ServerDetail.test.tsx` (đủ trường, "Không có mô tả"); `App.integration.test.tsx` (chi tiết qua `getById` thật) |
+| AC7 | `App.test.tsx`: luồng gõ tìm kiếm + lọc → chi tiết → quay lại giữ nguyên; `getById` trả `undefined` → "Không tìm thấy máy chủ" + quay lại được |
+| AC8 | `filterServers` là hàm thuần ở `src/domain/`; UI không import `servers.json`; `strict`, không `any`, không thêm thư viện runtime |
+| AC9 | `<table>`, `<th scope="col">`, `<label htmlFor>` cho ô nhập/chọn, tên máy chủ là `<button>`, chi tiết dùng `<dl>`; test truy vấn theo role/label |
+| AC10 | lint, build, test đạt như trên; đủ các nhóm test yêu cầu, có test `App` không mock |
+
+### Ghi chú
+
+- Đường dẫn tài liệu thực tế là `docs/bmad-office/` (không phải `docs/stories/`, `docs/architecture.md`); `architecture.md` vẫn là khung rỗng nên bám quy ước trong story.
+- `ServerList` tự gọi `filterServers` từ props `servers` + `filters` (tổng N = `servers.length`); `App` giữ `filters` để quay lại không mất bộ lọc. Giá trị của `<select>` được kiểm tra bằng `SERVER_STATUSES`/`SERVER_ENVIRONMENTS` thay vì ép kiểu.
+- Không dùng `@testing-library/user-event` (không thêm thư viện); dùng `fireEvent`.
+- Máy mặc định là Node 10; phải thêm Node ≥ 20.19 vào `PATH` khi chạy lệnh. `engines` đã thêm (V2 của qa-1.1).
+- Vitest chạy chậm (~70 giây, chủ yếu do khởi tạo jsdom từng tệp), không ảnh hưởng kết quả.
+- Chưa kiểm tra bằng trình duyệt thật (`npm run dev`); giao diện chỉ được xác nhận qua test jsdom và build.
+- V1 của qa-1.1 **vẫn còn**: các tệp cấu hình/types/data của 1.1 và toàn bộ mã 1.2 đang chưa được commit (`??`). Người điều phối cần commit đủ khi bàn giao.
 
 ## QA Results
 
