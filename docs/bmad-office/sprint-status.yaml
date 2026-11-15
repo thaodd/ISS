@@ -45,11 +45,11 @@ stories:
   "1.1":
     epic: "1"
     title: "Khung dự án React và mô hình dữ liệu máy chủ"
-    status: review
+    status: done
     sprint: 1
     order: 1
     depends_on: []
-    note: "Dev xong 2026-11-15: lint, build, test (37 test) đều đạt, dev server chạy được (chi tiết ở Dev Agent Record trong story-1.1.md). Chờ QA kiểm thử thật. Cần Node >= 20.19 (máy mặc định là Node 10). Tập trường Server, Vite/TS/Vitest vẫn là giả định của SM, cần PM/Architect xác nhận."
+    note: "QA đạt 2026-11-15 (qa-1.1.md): AC1-AC8 đạt, lint/build/test (37 test) chạy lại đều đạt. Cần Node >= 20.19 (máy mặc định là Node 10). Còn việc nhỏ: commit đủ tệp cấu hình/types/data chưa được track (V1), thêm engines Node. Tập trường Server, Vite/TS/Vitest vẫn là giả định của SM, cần PM/Architect xác nhận."
   "1.2":
     epic: "1"
     title: "Story 1.2"
@@ -94,6 +94,6 @@ stories:
 # Rủi ro / việc cần xử lý trước khi Dev bắt đầu sprint 1
 blockers:
   - "epics.md, prd.md, architecture.md chưa có nội dung -> PM/Architect cần hoàn thiện trước; Scrum Master không tự bịa yêu cầu."
-  - "Story 1.1 đã hoàn thành phần Dev, đang ở review (chờ QA). Máy mặc định dùng Node 10, QA/Dev cần chuyển sang Node >= 20.19 (ví dụ v22.13.0 trong nvm). 5 story còn lại vẫn là khung; Scrum Master sẽ soạn tiếp 1.2 -> 1.3 khi epics.md có nội dung."
-  - "qa-1.1.md hiện ghi 'đạt (mô phỏng)' nhưng chưa có mã nguồn nào; cần QA kiểm thử lại sau khi Dev hoàn thành story 1.1 đã soạn."
-  - "Báo cáo QA hiện toàn 'mô phỏng', chưa có test thật; không dùng làm căn cứ để đánh dấu done."
+  - "Story 1.1 đã Done (QA đạt, qa-1.1.md). Máy mặc định dùng Node 10, cần chuyển sang Node >= 20.19 (ví dụ v22.13.0 trong nvm). 5 story còn lại vẫn là khung; Scrum Master sẽ soạn tiếp 1.2 -> 1.3 khi epics.md có nội dung."
+  - "Story 1.1: commit 6683830 thiếu các tệp cấu hình/types/data (đang untracked) -> cần commit đủ để repo build được từ HEAD (qa-1.1.md, V1)."
+  - "qa-1.2 ... qa-2.3 vẫn là báo cáo 'mô phỏng', chưa có test thật; chỉ qa-1.1.md là kiểm thử thật."

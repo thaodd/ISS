@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Review
+- **Trạng thái:** Done
 - **Phụ thuộc:** không (đây là story đầu tiên, là móng của Epic 1)
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -147,4 +147,9 @@ Linh Y Tiên Tử chạy lại `npm install && npm test && npm run lint && npm r
 
 ## QA Results
 
-_(Để trống – QA điền sau khi kiểm thử.)_
+**QA:** Linh Y Tiên Tử · QA Engineer (Quinn) – 2026-11-15. **Kết luận: ĐẠT (PASS).** Chi tiết: `qa-1.1.md`.
+
+- Chạy lại độc lập bằng Node v22.13.0: `npm test` 37/37 đạt; `npm run lint` sạch; `npm run build` thành công; `npm run dev` trả 200 cho `/`, `/src/main.tsx`, `/src/data/servers.json`; `npm audit --omit=dev` 0 lỗ hổng.
+- AC1–AC8: **đạt cả 8**, có bằng chứng trong `qa-1.1.md`.
+- Vấn đề: V1 (Trung bình) – commit `6683830` thiếu `package.json`, `tsconfig*`, `vite.config.ts`, `index.html`, `src/main.tsx`, `src/types/`, `src/data/servers.json`, `src/test/setup.ts`… (đang untracked) → cần commit đủ trước khi hợp nhất. V2 (Thấp) thêm `engines` Node ≥ 20.19; V3 (Thấp) thêm test App không mock; V4 (Thấp) chưa xem trên trình duyệt thật; V5 (Thấp) `npm audit` dev 7 moderate.
+- Trạng thái story: **Done**.
