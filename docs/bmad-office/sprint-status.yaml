@@ -71,7 +71,7 @@ stories:
     sprint: 1
     order: 1
     depends_on: []
-    note: "Commit feat(story-1.1) + test(story-1.1): QA PASS. Nền cho mọi story sau: khung Vite/React/TS/Vitest và kiểu Server. Cần Node >= 20.19 (máy mặc định là Node 10). Tập trường Server, Vite/TS/Vitest là giả định của SM, cần PM/Architect xác nhận."
+    note: "Story 1.1 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.1.story.md, bản sao docs/bmad-office/story-1.1.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.1) + test(story-1.1): QA PASS. Nền cho mọi story sau: khung Vite/React/TS/Vitest và kiểu Server. Cần Node >= 20.19 (máy mặc định là Node 10). Tập trường Server, Vite/TS/Vitest là giả định của SM, cần PM/Architect xác nhận."
   "1.2":
     epic: "1"
     title: "Danh sách, tìm kiếm/lọc và xem chi tiết máy chủ"
