@@ -67,11 +67,11 @@ stories:
   "1.1":
     epic: "1"
     title: "Khung dự án React và mô hình dữ liệu máy chủ"
-    status: review
+    status: done
     sprint: 1
     order: 1
     depends_on: []
-    note: "Dev (Kiếm Thánh) 2026-11-15: đã đối chiếu mã với AC1-AC8, không cần sửa mã; lint/build/test đạt (Node 22.13.0, 331/331 test); Dev Agent Record đã điền trong docs/stories/1.1.story.md (bản sao docs/bmad-office/story-1.1.md) -> chuyển review chờ QA. Còn mở: các tệp cấu hình/types/data vẫn untracked, chờ ứng dụng tự commit. Lịch sử: story được soạn lại đầy đủ ngày 2026-11-15 vì tệp cũ bị khung rỗng ghi đè; mã + QA PASS đã có từ sprint 1. Commit feat(story-1.1) + test(story-1.1): QA PASS. Nền cho mọi story sau: khung Vite/React/TS/Vitest và kiểu Server. Cần Node >= 20.19 (máy mặc định là Node 10). Tập trường Server, Vite/TS/Vitest là giả định của SM, cần PM/Architect xác nhận."
+    note: "QA (Linh Y Tiên Tử) 2026-11-15: PASS, AC1-AC8 đạt (lint/build đạt, 331/331 test, Node 22.13.0); báo cáo docs/qa/qa-1.1.md. Còn lưu ý V1: các tệp cấu hình/types/data chưa commit -> chờ ứng dụng tự commit, SM kiểm git status trước 2.3. Dev (Kiếm Thánh) 2026-11-15: đã đối chiếu mã với AC1-AC8, không cần sửa mã; lint/build/test đạt (Node 22.13.0, 331/331 test); Dev Agent Record đã điền trong docs/stories/1.1.story.md (bản sao docs/bmad-office/story-1.1.md) -> chuyển review chờ QA. Còn mở: các tệp cấu hình/types/data vẫn untracked, chờ ứng dụng tự commit. Lịch sử: story được soạn lại đầy đủ ngày 2026-11-15 vì tệp cũ bị khung rỗng ghi đè; mã + QA PASS đã có từ sprint 1. Commit feat(story-1.1) + test(story-1.1): QA PASS. Nền cho mọi story sau: khung Vite/React/TS/Vitest và kiểu Server. Cần Node >= 20.19 (máy mặc định là Node 10). Tập trường Server, Vite/TS/Vitest là giả định của SM, cần PM/Architect xác nhận."
   "1.2":
     epic: "1"
     title: "Danh sách, tìm kiếm/lọc và xem chi tiết máy chủ"
