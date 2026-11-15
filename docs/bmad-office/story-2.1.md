@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 2 – Quản lý và ghi nhận cài đặt ứng dụng
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Ready
+- **Trạng thái:** Review
 - **Phụ thuộc:** Không phụ thuộc dữ liệu máy chủ. Chỉ dùng lại khung dự án và mẫu thiết kế (kiểm tra → repository → UI, lưu `localStorage`) của Story 1.1–1.3 (đều Done).
 - **Là nền cho:** Story 2.2 (gán ứng dụng vào máy chủ, tham chiếu ứng dụng theo `id`).
 - **Bàn giao cho:** Kiếm Thánh · Developer
@@ -78,30 +78,30 @@ Là một **quản trị viên hạ tầng của ISS**, tôi muốn **quản lý
 
 ## Nhiệm vụ / việc con
 
-- [ ] **T1 – Kiểu, kiểm tra hợp lệ, dữ liệu nhập (AC1, AC2, AC3, AC7, AC18)**
-  - [ ] Tạo `src/types/application.ts` (`Application`).
-  - [ ] Tạo `src/domain/validateApplication.ts` (`validateApplication`, `ApplicationFieldErrors`, `ApplicationValidationResult`) và `validateApplication.test.ts`: hợp lệ tối thiểu, có mô tả, từng trường thiếu/rỗng/chỉ khoảng trắng, `description` sai kiểu, đầu vào không phải đối tượng (`null`, mảng, chuỗi, số), nhiều lỗi cùng lúc, trường lạ bị bỏ.
-  - [ ] Tạo `src/domain/applicationInput.ts` (`ApplicationInput`, `normalizeApplicationInput`, `generateApplicationId`) và `applicationInput.test.ts`: chuẩn hóa từng trường, mô tả toàn khoảng trắng bị bỏ, không đổi đầu vào; sinh id: rỗng, liên tiếp, khoảng trống, id lạ bị bỏ qua, `app-999` → `app-1000`.
-  - [ ] Tạo `src/data/applications.json` đúng AC7 (kiểm tra bằng test repository mục T2 rằng cả 3 bản ghi đều hợp lệ).
-- [ ] **T2 – Repository (AC4, AC5, AC6, AC7)**
-  - [ ] Tạo `src/repositories/applicationRepository.ts` theo mẫu `serverRepository.ts` (`createApplicationRepository(seed, storage?)`, `ApplicationSaveResult`, `APPLICATIONS_STORAGE_KEY`, chế độ chỉ-bộ-nhớ khi không có `localStorage`), thêm kiểm tra trùng tên (AC5). Không import/ sửa `serverRepository.ts`.
-  - [ ] Tạo `applicationRepository.test.ts` với kho giả `createMemoryStorage` (`src/test/memoryStorage.ts`, có sẵn): đọc (`getAll` là bản sao, `getById`), nạp dữ liệu mẫu hợp lệ (3 bản ghi), `create` (id, vị trí cuối, dữ liệu sai không đổi gì, tên trùng kể cả khác hoa/thường/khoảng trắng), `update` (giữ id/vị trí, tên chính mình không bị coi trùng, tên trùng ứng dụng khác bị từ chối, id lạ), `remove` có/không tồn tại; lưu bền: chưa có khóa, có khóa, `[]`, bản ghi hỏng/trùng id (có `console.warn`), JSON hỏng, không phải mảng, `getItem`/`setItem` ném lỗi, "tải lại" bằng repository thứ hai, xóa hết rồi tải lại.
-- [ ] **T3 – Biểu mẫu `ApplicationForm` (AC11, AC12, AC13, AC14, AC18)**
-  - [ ] Tạo `src/components/ApplicationForm.tsx` (thuần trình bày, mẫu theo `ServerForm.tsx`): props `mode: 'create' | 'edit'`, `initialValues?: Application`, `errors: ApplicationFieldErrors`, `onSubmit(input: ApplicationInput)`, `onCancel()`; state cục bộ giữ giá trị; không tự kiểm tra hợp lệ; `id` ở chế độ sửa chỉ là chữ; lỗi theo trường với `aria-invalid`/`aria-describedby`; `id` các ô dùng tiền tố `application-form-` (tránh trùng `server-form-`).
-  - [ ] Tạo `ApplicationForm.test.tsx`: mặc định trống khi thêm; điền sẵn khi sửa và `id` không phải ô nhập; submit gọi `onSubmit` đúng dữ liệu (mô tả trống gửi `''`, chuẩn hóa là việc của repository); lỗi từng trường kèm `aria-invalid`/`aria-describedby`; giữ giá trị khi có lỗi; `errors.id` hiện `role="alert"`; "Hủy" gọi `onCancel`; Enter (submit form) lưu được.
-- [ ] **T4 – `ApplicationList` và `ApplicationDetail` (AC9, AC10, AC15, AC18)**
-  - [ ] Tạo `src/components/ApplicationList.tsx` (props `applications`, `onSelect`, `onCreate`) và `.test.tsx`: nút "Thêm ứng dụng" kể cả khi rỗng, `Chưa có ứng dụng nào`, dòng `Có N ứng dụng`, các cột, bấm tên gọi `onSelect(id)`, mô tả trống không làm vỡ bảng.
-  - [ ] Tạo `src/components/ApplicationDetail.tsx` (props `application | undefined`, `onBack`, `onEdit`, `onDelete`; vùng xác nhận xóa dùng state cục bộ như `ServerDetail`) và `.test.tsx`: hiển thị đủ trường, `Không có mô tả`, `Không tìm thấy ứng dụng` không có Sửa/Xóa, bấm "Xóa" hiện đúng nội dung xác nhận, "Hủy" không gọi `onDelete`, "Xác nhận xóa" gọi đúng một lần, `onEdit`/`onBack` được gọi.
-- [ ] **T5 – Ghép trong `App` và điều hướng (AC8, AC11–AC16, AC18)**
-  - [ ] Sửa `src/App.tsx`: thêm trạng thái mục đang mở (`servers` | `applications`) và `<nav>` theo AC8; thêm các màn hình ứng dụng (danh sách/chi tiết/thêm/sửa) bằng `useState` (không router) — có thể mở rộng `Screen` hoặc tách thành hai nhánh/hai component trang, chọn cách ít đổi hành vi Epic 1 nhất; giữ `filters` máy chủ ở `App`; danh sách ứng dụng lưu trong state và đọc lại từ repository sau mỗi thao tác ghi.
-  - [ ] Thêm prop `applicationRepository?`; gọi `create`/`update`/`remove`, truyền `errors` xuống `ApplicationForm`, đặt thông báo `role="status"` theo AC16, xóa thông báo/lỗi khi chuyển màn hình hoặc chuyển mục. Chỉ hiện dòng "Đã tải…" và tiêu đề `h1` của mục đang mở.
-  - [ ] Sửa tùy chọn `src/App.css`: style thanh điều hướng (nút đang chọn), tái sử dụng class có sẵn (`form-field`, `field-error`, `form-actions`, `detail-actions`, `confirm-delete`, `link-button`).
-- [ ] **T6 – Test luồng `App` (AC8, AC11–AC17, AC19)**
-  - [ ] Tạo `src/App.applications.test.tsx` (không mock module; mỗi test tạo repository ứng dụng mới trên kho giả riêng và truyền qua prop `applicationRepository`; repository máy chủ cũng truyền kho giả riêng để không đụng `localStorage` thật): điều hướng sang "Ứng dụng" và quay lại "Máy chủ" (bộ lọc máy chủ được giữ, `aria-current`); thêm hợp lệ → chi tiết + thông báo + `Đã tải 4 ứng dụng` + id `app-004`; thêm thiếu tên/nhà cung cấp → lỗi từng trường, giữ giá trị, không đổi "Đã tải N"; thêm tên trùng (khác hoa/thường) → lỗi tên; sửa hợp lệ, sửa giữ nguyên tên, sửa xóa mô tả; hủy khi thêm/sửa; xóa có xác nhận (hủy rồi xác nhận); xóa hết → `Chưa có ứng dụng nào` + nút "Thêm ứng dụng"; "tải lại" (render `App` mới với repository mới trên cùng kho) thấy dữ liệu đã đổi, kể cả khi đã xóa hết; chuyển mục xóa thông báo.
-  - [ ] Chạy lại và giữ cho đạt toàn bộ test Epic 1, đặc biệt `App.test.tsx` (mock module `serverRepository`), `App.integration.test.tsx`, `App.crud.test.tsx`. Chỉ sửa tối thiểu nếu bắt buộc, ghi rõ lý do trong Dev Agent Record.
-- [ ] **T7 – Hoàn tất (AC19)**
-  - [ ] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt bằng Node ≥ 20.19.
-  - [ ] Ghi kết quả và bằng chứng theo từng AC vào mục Dev Agent Record, đổi trạng thái story sang `Review` và cập nhật `sprint-status.yaml`.
+- [x] **T1 – Kiểu, kiểm tra hợp lệ, dữ liệu nhập (AC1, AC2, AC3, AC7, AC18)**
+  - [x] Tạo `src/types/application.ts` (`Application`).
+  - [x] Tạo `src/domain/validateApplication.ts` (`validateApplication`, `ApplicationFieldErrors`, `ApplicationValidationResult`) và `validateApplication.test.ts`: hợp lệ tối thiểu, có mô tả, từng trường thiếu/rỗng/chỉ khoảng trắng, `description` sai kiểu, đầu vào không phải đối tượng (`null`, mảng, chuỗi, số), nhiều lỗi cùng lúc, trường lạ bị bỏ.
+  - [x] Tạo `src/domain/applicationInput.ts` (`ApplicationInput`, `normalizeApplicationInput`, `generateApplicationId`) và `applicationInput.test.ts`: chuẩn hóa từng trường, mô tả toàn khoảng trắng bị bỏ, không đổi đầu vào; sinh id: rỗng, liên tiếp, khoảng trống, id lạ bị bỏ qua, `app-999` → `app-1000`.
+  - [x] Tạo `src/data/applications.json` đúng AC7 (kiểm tra bằng test repository mục T2 rằng cả 3 bản ghi đều hợp lệ).
+- [x] **T2 – Repository (AC4, AC5, AC6, AC7)**
+  - [x] Tạo `src/repositories/applicationRepository.ts` theo mẫu `serverRepository.ts` (`createApplicationRepository(seed, storage?)`, `ApplicationSaveResult`, `APPLICATIONS_STORAGE_KEY`, chế độ chỉ-bộ-nhớ khi không có `localStorage`), thêm kiểm tra trùng tên (AC5). Không import/ sửa `serverRepository.ts`.
+  - [x] Tạo `applicationRepository.test.ts` với kho giả `createMemoryStorage` (`src/test/memoryStorage.ts`, có sẵn): đọc (`getAll` là bản sao, `getById`), nạp dữ liệu mẫu hợp lệ (3 bản ghi), `create` (id, vị trí cuối, dữ liệu sai không đổi gì, tên trùng kể cả khác hoa/thường/khoảng trắng), `update` (giữ id/vị trí, tên chính mình không bị coi trùng, tên trùng ứng dụng khác bị từ chối, id lạ), `remove` có/không tồn tại; lưu bền: chưa có khóa, có khóa, `[]`, bản ghi hỏng/trùng id (có `console.warn`), JSON hỏng, không phải mảng, `getItem`/`setItem` ném lỗi, "tải lại" bằng repository thứ hai, xóa hết rồi tải lại.
+- [x] **T3 – Biểu mẫu `ApplicationForm` (AC11, AC12, AC13, AC14, AC18)**
+  - [x] Tạo `src/components/ApplicationForm.tsx` (thuần trình bày, mẫu theo `ServerForm.tsx`): props `mode: 'create' | 'edit'`, `initialValues?: Application`, `errors: ApplicationFieldErrors`, `onSubmit(input: ApplicationInput)`, `onCancel()`; state cục bộ giữ giá trị; không tự kiểm tra hợp lệ; `id` ở chế độ sửa chỉ là chữ; lỗi theo trường với `aria-invalid`/`aria-describedby`; `id` các ô dùng tiền tố `application-form-` (tránh trùng `server-form-`).
+  - [x] Tạo `ApplicationForm.test.tsx`: mặc định trống khi thêm; điền sẵn khi sửa và `id` không phải ô nhập; submit gọi `onSubmit` đúng dữ liệu (mô tả trống gửi `''`, chuẩn hóa là việc của repository); lỗi từng trường kèm `aria-invalid`/`aria-describedby`; giữ giá trị khi có lỗi; `errors.id` hiện `role="alert"`; "Hủy" gọi `onCancel`; Enter (submit form) lưu được.
+- [x] **T4 – `ApplicationList` và `ApplicationDetail` (AC9, AC10, AC15, AC18)**
+  - [x] Tạo `src/components/ApplicationList.tsx` (props `applications`, `onSelect`, `onCreate`) và `.test.tsx`: nút "Thêm ứng dụng" kể cả khi rỗng, `Chưa có ứng dụng nào`, dòng `Có N ứng dụng`, các cột, bấm tên gọi `onSelect(id)`, mô tả trống không làm vỡ bảng.
+  - [x] Tạo `src/components/ApplicationDetail.tsx` (props `application | undefined`, `onBack`, `onEdit`, `onDelete`; vùng xác nhận xóa dùng state cục bộ như `ServerDetail`) và `.test.tsx`: hiển thị đủ trường, `Không có mô tả`, `Không tìm thấy ứng dụng` không có Sửa/Xóa, bấm "Xóa" hiện đúng nội dung xác nhận, "Hủy" không gọi `onDelete`, "Xác nhận xóa" gọi đúng một lần, `onEdit`/`onBack` được gọi.
+- [x] **T5 – Ghép trong `App` và điều hướng (AC8, AC11–AC16, AC18)**
+  - [x] Sửa `src/App.tsx`: thêm trạng thái mục đang mở (`servers` | `applications`) và `<nav>` theo AC8; thêm các màn hình ứng dụng (danh sách/chi tiết/thêm/sửa) bằng `useState` (không router) — có thể mở rộng `Screen` hoặc tách thành hai nhánh/hai component trang, chọn cách ít đổi hành vi Epic 1 nhất; giữ `filters` máy chủ ở `App`; danh sách ứng dụng lưu trong state và đọc lại từ repository sau mỗi thao tác ghi.
+  - [x] Thêm prop `applicationRepository?`; gọi `create`/`update`/`remove`, truyền `errors` xuống `ApplicationForm`, đặt thông báo `role="status"` theo AC16, xóa thông báo/lỗi khi chuyển màn hình hoặc chuyển mục. Chỉ hiện dòng "Đã tải…" và tiêu đề `h1` của mục đang mở.
+  - [x] Sửa tùy chọn `src/App.css`: style thanh điều hướng (nút đang chọn), tái sử dụng class có sẵn (`form-field`, `field-error`, `form-actions`, `detail-actions`, `confirm-delete`, `link-button`).
+- [x] **T6 – Test luồng `App` (AC8, AC11–AC17, AC19)**
+  - [x] Tạo `src/App.applications.test.tsx` (không mock module; mỗi test tạo repository ứng dụng mới trên kho giả riêng và truyền qua prop `applicationRepository`; repository máy chủ cũng truyền kho giả riêng để không đụng `localStorage` thật): điều hướng sang "Ứng dụng" và quay lại "Máy chủ" (bộ lọc máy chủ được giữ, `aria-current`); thêm hợp lệ → chi tiết + thông báo + `Đã tải 4 ứng dụng` + id `app-004`; thêm thiếu tên/nhà cung cấp → lỗi từng trường, giữ giá trị, không đổi "Đã tải N"; thêm tên trùng (khác hoa/thường) → lỗi tên; sửa hợp lệ, sửa giữ nguyên tên, sửa xóa mô tả; hủy khi thêm/sửa; xóa có xác nhận (hủy rồi xác nhận); xóa hết → `Chưa có ứng dụng nào` + nút "Thêm ứng dụng"; "tải lại" (render `App` mới với repository mới trên cùng kho) thấy dữ liệu đã đổi, kể cả khi đã xóa hết; chuyển mục xóa thông báo.
+  - [x] Chạy lại và giữ cho đạt toàn bộ test Epic 1, đặc biệt `App.test.tsx` (mock module `serverRepository`), `App.integration.test.tsx`, `App.crud.test.tsx`. Chỉ sửa tối thiểu nếu bắt buộc, ghi rõ lý do trong Dev Agent Record.
+- [x] **T7 – Hoàn tất (AC19)**
+  - [x] Chạy `npm run lint`, `npm run build`, `npm test` đều đạt bằng Node ≥ 20.19.
+  - [x] Ghi kết quả và bằng chứng theo từng AC vào mục Dev Agent Record, đổi trạng thái story sang `Review` và cập nhật `sprint-status.yaml`.
 
 ## Ghi chú cho Dev
 
@@ -170,5 +170,69 @@ Khi xem thử bằng `npm run dev`, muốn quay về dữ liệu mẫu thì xóa
 Mọi ô nhiệm vụ đã đánh dấu; `lint`, `build`, `test` đều đạt; AC1–AC19 có bằng chứng trong Dev Agent Record; sau đó chuyển story sang `review` để QA (Linh Y Tiên Tử) kiểm thử.
 
 ## Dev Agent Record
+
+- **Người làm:** Kiếm Thánh · Developer (Amelia) — 2026-11-15
+- **Môi trường:** Node v22.13.0 (nvm), Windows. Máy mặc định Node 10 nên đặt `PATH` tới Node 22 cho từng lệnh.
+- **Trạng thái:** Review (chờ QA – Linh Y Tiên Tử)
+
+### Tệp đã tạo
+
+| Tệp | Nội dung |
+|---|---|
+| `src/types/application.ts` | `Application` (AC1) |
+| `src/domain/validateApplication.ts` (+ `.test.ts`) | `validateApplication`, `ApplicationFieldErrors`, `ApplicationValidationResult` (AC2) |
+| `src/domain/applicationInput.ts` (+ `.test.ts`) | `ApplicationInput`, `normalizeApplicationInput`, `generateApplicationId` (AC3) |
+| `src/data/applications.json` | 3 ứng dụng mẫu (AC7) |
+| `src/repositories/applicationRepository.ts` (+ `.test.ts`) | `createApplicationRepository`, `applicationRepository`, `APPLICATIONS_STORAGE_KEY = 'iss.apps.v1'`, `ApplicationSaveResult`, kiểm tra trùng tên (AC4–AC7) |
+| `src/components/ApplicationForm.tsx` (+ `.test.tsx`) | Biểu mẫu thêm/sửa, id ô nhập tiền tố `application-form-` (AC11–AC14) |
+| `src/components/ApplicationList.tsx` (+ `.test.tsx`) | Danh sách (AC9) |
+| `src/components/ApplicationDetail.tsx` (+ `.test.tsx`) | Chi tiết + xác nhận xóa trong trang (AC10, AC15) |
+| `src/App.applications.test.tsx` | Test luồng `App`, không mock module (AC8, AC11–AC17) |
+
+### Tệp đã sửa
+
+- `src/App.tsx`: thêm `<nav>` hai nút, state `section`, `applicationScreen`, `applicationErrors`, `applications`; thêm prop `applicationRepository?`. Nhánh máy chủ giữ nguyên mã, chỉ bọc theo `section`. `notice` dùng chung nên chuyển màn hình/mục đều xóa thông báo.
+- `src/App.css`: thêm style `.main-nav` (nút đang chọn theo `aria-current="page"`).
+- Không sửa bất kỳ tệp Epic 1 nào khác; không sửa `docs/` ngoài tệp này và `sprint-status.yaml`. Không thêm thư viện.
+
+### Lệnh đã chạy (Node 22.13.0)
+
+```
+npm run lint    -> đạt, không cảnh báo
+npm run build   -> đạt (tsc -b && vite build, 33 modules)
+npm test        -> 18 tệp, 229/229 test đạt (136 cũ giữ nguyên + 93 mới)
+```
+
+Mốc trước khi sửa: 136/136 test đạt. Không xóa test, không hạ kỳ vọng; không phải sửa test Epic 1 nào (`App.test.tsx` mock `serverRepository` vẫn đạt vì mặc định mở mục "Máy chủ").
+
+Lần chạy đầu có 1 test mới lỗi do lỗi của chính test (`setup(undefined)` kích hoạt tham số mặc định trong `ApplicationDetail.test.tsx`); đã sửa helper, không đụng mã sản phẩm.
+
+### Bằng chứng theo AC
+
+| AC | Bằng chứng |
+|---|---|
+| AC1 | `types/application.ts`; `types/server.ts` không đổi. |
+| AC2 | `validateApplication.test.ts` (hợp lệ, từng trường thiếu/rỗng/khoảng trắng/sai kiểu, `description` sai kiểu, đầu vào không phải đối tượng, nhiều lỗi, trường lạ). |
+| AC3 | `applicationInput.test.ts` (chuẩn hóa, bỏ mô tả rỗng, không đổi đầu vào, sinh id rỗng/liên tiếp/khoảng trống/id lạ/`app-999`→`app-1000`). |
+| AC4, AC5 | `applicationRepository.test.ts` nhóm create/update/remove (bản sao `getAll`, giữ id & vị trí, bỏ qua `id` trong input, id lạ, tên trùng khác hoa/thường/khoảng trắng, tên chính mình không bị coi trùng, dữ liệu sai không ghi). |
+| AC6 | nhóm "lưu bền": chưa có khóa, có khóa, `[]`, bản ghi hỏng/trùng id (+`console.warn`, không loại vì trùng tên), JSON hỏng, không phải mảng, `getItem`/`setItem` ném lỗi, tải lại bằng repository thứ hai, xóa hết rồi tải lại. |
+| AC7 | test "applications.json có đúng 3 bản ghi hợp lệ" (không `console.warn`) và "nhận id `app-004`". |
+| AC8 | `App.applications.test.tsx` nhóm điều hướng (`aria-current`, tiêu đề, dòng "Đã tải…", giữ bộ lọc máy chủ, chuyển mục xóa thông báo/lỗi). |
+| AC9, AC10 | `ApplicationList.test.tsx`, `ApplicationDetail.test.tsx`. |
+| AC11–AC14 | `ApplicationForm.test.tsx` + `App.applications.test.tsx` (thêm/sửa hợp lệ, lỗi theo trường giữ giá trị, `aria-invalid`/`aria-describedby`, `role="alert"` cho `errors.id`, hủy thêm/sửa). |
+| AC15 | `ApplicationDetail.test.tsx` + `App.applications.test.tsx` (hủy rồi xác nhận xóa; không dùng `window.confirm`). |
+| AC16 | `App.applications.test.tsx`: thông báo `role="status"` cho thêm/sửa/xóa, "Đã tải N ứng dụng" cập nhật ngay, xóa hết → "Chưa có ứng dụng nào" + nút "Thêm ứng dụng". |
+| AC17 | `App.applications.test.tsx` nhóm "bền qua lần tải lại" (render `App` mới trên cùng kho, kể cả xóa hết). |
+| AC18 | UI không import `applications.json` hay `localStorage`; chỉ `App` gọi repository; không `any`; `strict`; mỗi ô nhập có `<label>`; 136 test cũ vẫn đạt. |
+| AC19 | lint, build, test đều đạt như trên. |
+
+### Ghi chú và điều cần lưu ý
+
+- Đổi mục luôn đưa cả hai mục về màn danh sách (đúng AC8); `filters` máy chủ nằm ở `App` nên được giữ.
+- `App` giữ hai bộ state `screen`/`applicationScreen` thay vì mở rộng `Screen`, để ít đổi hành vi Epic 1 nhất. Lặp mã nhẹ giữa `Server*` và `Application*` theo đúng khuyến nghị của story.
+- **Đề xuất cho Retrospective (không làm ở story này):** tổng quát hóa phần nạp/ghi `localStorage` của hai repository và cặp `Form/List/Detail` khi có entity thứ ba; tách `App` thành các component trang khi Story 2.2 thêm màn hình. Test vẫn chậm (~160 giây cho 18 tệp do jsdom khởi tạo lại mỗi tệp); có thể xem `pool: 'vmThreads'`.
+- Rủi ro đã biết cho 2.2: `id` max+1 có thể dùng lại id của ứng dụng đã xóa (giả định 7); bản ghi cài đặt tham chiếu `appId` cần xử lý.
+- **Nợ V1 còn nguyên:** các tệp cấu hình/types/data của 1.1 và `App.css` vẫn chưa commit (`git status`), cùng với toàn bộ tệp mới của 2.1. Dev không commit; người điều phối cần commit đủ để HEAD build được.
+- Chưa xem thử giao diện bằng trình duyệt thật (`npm run dev`); hành vi được kiểm bằng test jsdom + Testing Library. QA nên xem thêm kiểu dáng thanh điều hướng.
 
 ## QA Results
