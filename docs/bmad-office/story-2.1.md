@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 2 – Quản lý và ghi nhận cài đặt ứng dụng
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Review
+- **Trạng thái:** Done
 - **Phụ thuộc:** Không phụ thuộc dữ liệu máy chủ. Chỉ dùng lại khung dự án và mẫu thiết kế (kiểm tra → repository → UI, lưu `localStorage`) của Story 1.1–1.3 (đều Done).
 - **Là nền cho:** Story 2.2 (gán ứng dụng vào máy chủ, tham chiếu ứng dụng theo `id`).
 - **Bàn giao cho:** Kiếm Thánh · Developer
@@ -236,3 +236,12 @@ Lần chạy đầu có 1 test mới lỗi do lỗi của chính test (`setup(un
 - Chưa xem thử giao diện bằng trình duyệt thật (`npm run dev`); hành vi được kiểm bằng test jsdom + Testing Library. QA nên xem thêm kiểu dáng thanh điều hướng.
 
 ## QA Results
+
+- **Người kiểm thử:** Linh Y Tiên Tử · QA Engineer (Quinn) — 2026-11-15. Chi tiết: `qa-2.1.md`.
+- **Kết luận: ĐẠT (PASS)** — AC1–AC19 đều đạt. QA chạy lại bằng Node 22.13.0: `npm run lint` đạt; `npm run build` đạt; `npm test` 18 tệp, 229/229 test đạt (136 cũ + 93 mới).
+- **Vấn đề còn lại (không chặn):**
+  - V1 (Trung bình, nợ sprint 1): 13 tệp cấu hình/types/data chưa commit nên HEAD không build được; người điều phối cần commit đủ trước 2.2.
+  - V2 (Thấp): chi tiết hiện ô trống thay vì "Không có mô tả" nếu bản ghi nạp từ kho có `description: ""`.
+  - V3 (Thấp): lỗi biểu mẫu không tự xóa khi gõ lại; chưa quản lý focus.
+  - V4 (Thấp): test chậm (~165 giây); chưa xem thử trên trình duyệt thật; id max+1 có thể dùng lại id đã xóa (rủi ro cho 2.2).
+- **Trạng thái story:** Done.
