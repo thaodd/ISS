@@ -7,9 +7,10 @@ interface ServerDetailProps {
   onBack: () => void
   onEdit: () => void
   onDelete: () => void
+  installedCount?: number
 }
 
-function ServerDetail({ server, onBack, onEdit, onDelete }: ServerDetailProps) {
+function ServerDetail({ server, onBack, onEdit, onDelete, installedCount = 0 }: ServerDetailProps) {
   const [confirmingDelete, setConfirmingDelete] = useState(false)
 
   return (
@@ -35,6 +36,9 @@ function ServerDetail({ server, onBack, onEdit, onDelete }: ServerDetailProps) {
           {confirmingDelete && (
             <div role="alertdialog" aria-label="Xác nhận xóa" className="confirm-delete">
               <p>{`Xóa máy chủ "${server.name}"? Thao tác này không thể hoàn tác.`}</p>
+              {installedCount > 0 && (
+                <p>{`Máy chủ này có ${installedCount} bản ghi cài đặt; các bản ghi này sẽ bị xóa theo.`}</p>
+              )}
               <button type="button" onClick={onDelete}>
                 Xác nhận xóa
               </button>

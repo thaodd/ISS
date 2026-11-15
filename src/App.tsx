@@ -1,20 +1,28 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import './App.css'
 import ApplicationDetail from './components/ApplicationDetail'
 import ApplicationForm from './components/ApplicationForm'
 import ApplicationList from './components/ApplicationList'
+import InstallationForm from './components/InstallationForm'
 import ServerDetail from './components/ServerDetail'
 import ServerForm from './components/ServerForm'
+import ServerInstallations from './components/ServerInstallations'
 import ServerList from './components/ServerList'
 import type { ApplicationInput } from './domain/applicationInput'
 import { DEFAULT_FILTERS, type ServerFilters } from './domain/filterServers'
+import type { InstallationInput } from './domain/installationInput'
 import type { ServerInput } from './domain/serverInput'
 import type { ApplicationFieldErrors } from './domain/validateApplication'
+import type { InstallationFieldErrors } from './domain/validateInstallation'
 import type { ServerFieldErrors } from './domain/validateServer'
 import {
   applicationRepository as defaultApplicationRepository,
   type ApplicationRepository,
 } from './repositories/applicationRepository'
+import {
+  installationRepository as defaultInstallationRepository,
+  type InstallationRepository,
+} from './repositories/installationRepository'
 import { serverRepository, type ServerRepository } from './repositories/serverRepository'
 
 type Section = 'servers' | 'applications'
@@ -25,28 +33,35 @@ type Screen =
   | { name: 'create' }
   | { name: 'edit'; id: string }
 
+type ServerScreen = Screen | { name: 'install'; id: string }
+
 interface AppProps {
   repository?: ServerRepository
   applicationRepository?: ApplicationRepository
+  installationRepository?: InstallationRepository
 }
 
 function App({
   repository = serverRepository,
   applicationRepository = defaultApplicationRepository,
+  installationRepository = defaultInstallationRepository,
 }: AppProps) {
   const [section, setSection] = useState<Section>('servers')
   const [servers, setServers] = useState(() => repository.getAll())
   const [applications, setApplications] = useState(() => applicationRepository.getAll())
+  const [installations, setInstallations] = useState(() => installationRepository.getAll())
   const [filters, setFilters] = useState<ServerFilters>(DEFAULT_FILTERS)
-  const [screen, setScreen] = useState<Screen>({ name: 'list' })
+  const [screen, setScreen] = useState<ServerScreen>({ name: 'list' })
   const [applicationScreen, setApplicationScreen] = useState<Screen>({ name: 'list' })
   const [errors, setErrors] = useState<ServerFieldErrors>({})
   const [applicationErrors, setApplicationErrors] = useState<ApplicationFieldErrors>({})
+  const [installationErrors, setInstallationErrors] = useState<InstallationFieldErrors>({})
   const [notice, setNotice] = useState<string | null>(null)
 
-  function goTo(next: Screen) {
+  function goTo(next: ServerScreen) {
     setScreen(next)
     setErrors({})
+    setInstallationErrors({})
     setNotice(null)
   }
 
@@ -62,6 +77,7 @@ function App({
     setApplicationScreen({ name: 'list' })
     setErrors({})
     setApplicationErrors({})
+    setInstallationErrors({})
     setNotice(null)
   }
 
@@ -71,6 +87,18 @@ function App({
 
   function refreshApplications() {
     setApplications(applicationRepository.getAll())
+  }
+
+  function refreshInstallations() {
+    setInstallations(installationRepository.getAll())
+  }
+
+  function applicationName(appId: string): string {
+    return applicationRepository.getById(appId)?.name ?? appId
+  }
+
+  function serverName(serverId: string): string {
+    return repository.getById(serverId)?.name ?? serverId
   }
 
   function handleCreate(input: ServerInput) {
@@ -98,9 +126,40 @@ function App({
   function handleDelete(id: string) {
     const name = repository.getById(id)?.name
     const removed = repository.remove(id)
+    const removedInstallations = removed ? installationRepository.removeByServerId(id) : 0
     refresh()
+    refreshInstallations()
     goTo({ name: 'list' })
-    if (removed && name !== undefined) setNotice(`Đã xóa máy chủ "${name}"`)
+    if (removed && name !== undefined) {
+      setNotice(
+        removedInstallations > 0
+          ? `Đã xóa máy chủ "${name}" và ${removedInstallations} bản ghi cài đặt`
+          : `Đã xóa máy chủ "${name}"`,
+      )
+    }
+  }
+
+  function handleCreateInstallation(input: InstallationInput) {
+    const result = installationRepository.create(input)
+    if (!result.ok) {
+      setInstallationErrors(result.errors)
+      return
+    }
+    const { installation } = result
+    refreshInstallations()
+    goTo({ name: 'detail', id: installation.serverId })
+    setNotice(
+      `Đã ghi nhận cài đặt "${applicationName(installation.appId)}" trên máy chủ "${serverName(installation.serverId)}"`,
+    )
+  }
+
+  function handleRemoveInstallation(id: string) {
+    const installation = installationRepository.getById(id)
+    if (installation === undefined || !installationRepository.remove(id)) return
+    refreshInstallations()
+    setNotice(
+      `Đã xóa bản ghi cài đặt "${applicationName(installation.appId)}" khỏi máy chủ "${serverName(installation.serverId)}"`,
+    )
   }
 
   function handleCreateApplication(input: ApplicationInput) {
@@ -128,9 +187,17 @@ function App({
   function handleDeleteApplication(id: string) {
     const name = applicationRepository.getById(id)?.name
     const removed = applicationRepository.remove(id)
+    const removedInstallations = removed ? installationRepository.removeByAppId(id) : 0
     refreshApplications()
+    refreshInstallations()
     goToApplication({ name: 'list' })
-    if (removed && name !== undefined) setNotice(`Đã xóa ứng dụng "${name}"`)
+    if (removed && name !== undefined) {
+      setNotice(
+        removedInstallations > 0
+          ? `Đã xóa ứng dụng "${name}" và ${removedInstallations} bản ghi cài đặt`
+          : `Đã xóa ứng dụng "${name}"`,
+      )
+    }
   }
 
   function renderScreen() {
@@ -169,20 +236,53 @@ function App({
           />
         )
       }
+      case 'install': {
+        const server = repository.getById(screen.id)
+        if (server === undefined) return renderDetail(screen.id)
+        const { id } = screen
+        const installedAppIds = new Set(
+          installations
+            .filter((installation) => installation.serverId === id)
+            .map((installation) => installation.appId),
+        )
+        return (
+          <InstallationForm
+            key={id}
+            server={server}
+            applications={applications.filter((application) => !installedAppIds.has(application.id))}
+            errors={installationErrors}
+            onSubmit={handleCreateInstallation}
+            onCancel={() => goTo({ name: 'detail', id })}
+          />
+        )
+      }
       case 'detail':
         return renderDetail(screen.id)
     }
   }
 
   function renderDetail(id: string) {
+    const server = repository.getById(id)
+    const serverInstallations = installations.filter((installation) => installation.serverId === id)
     return (
-      <ServerDetail
-        key={id}
-        server={repository.getById(id)}
-        onBack={() => goTo({ name: 'list' })}
-        onEdit={() => goTo({ name: 'edit', id })}
-        onDelete={() => handleDelete(id)}
-      />
+      <Fragment key={id}>
+        <ServerDetail
+          server={server}
+          installedCount={serverInstallations.length}
+          onBack={() => goTo({ name: 'list' })}
+          onEdit={() => goTo({ name: 'edit', id })}
+          onDelete={() => handleDelete(id)}
+        />
+        {server !== undefined && (
+          <ServerInstallations
+            server={server}
+            installations={serverInstallations}
+            applications={applications}
+            onAdd={() => goTo({ name: 'install', id })}
+            onRemove={handleRemoveInstallation}
+          />
+        )}
+      </Fragment>
     )
   }
 
@@ -230,6 +330,7 @@ function App({
       <ApplicationDetail
         key={id}
         application={applicationRepository.getById(id)}
+        installedCount={installations.filter((installation) => installation.appId === id).length}
         onBack={() => goToApplication({ name: 'list' })}
         onEdit={() => goToApplication({ name: 'edit', id })}
         onDelete={() => handleDeleteApplication(id)}

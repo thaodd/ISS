@@ -6,9 +6,16 @@ interface ApplicationDetailProps {
   onBack: () => void
   onEdit: () => void
   onDelete: () => void
+  installedCount?: number
 }
 
-function ApplicationDetail({ application, onBack, onEdit, onDelete }: ApplicationDetailProps) {
+function ApplicationDetail({
+  application,
+  onBack,
+  onEdit,
+  onDelete,
+  installedCount = 0,
+}: ApplicationDetailProps) {
   const [confirmingDelete, setConfirmingDelete] = useState(false)
 
   return (
@@ -34,6 +41,9 @@ function ApplicationDetail({ application, onBack, onEdit, onDelete }: Applicatio
           {confirmingDelete && (
             <div role="alertdialog" aria-label="Xác nhận xóa" className="confirm-delete">
               <p>{`Xóa ứng dụng "${application.name}"? Thao tác này không thể hoàn tác.`}</p>
+              {installedCount > 0 && (
+                <p>{`Ứng dụng này đang được ghi nhận trên ${installedCount} máy chủ; các bản ghi cài đặt sẽ bị xóa theo.`}</p>
+              )}
               <button type="button" onClick={onDelete}>
                 Xác nhận xóa
               </button>
