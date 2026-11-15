@@ -1,10 +1,98 @@
-# sprint-status.yaml — tạo bởi BMAD Office (mô phỏng)
+# sprint-status.yaml — Kế hoạch sprint cho ISS
+# Người lập: Thiết Tướng (Scrum Master). Cập nhật: 2026-11-15.
+#
+# Trạng thái hợp lệ: backlog | ready | in-progress | review | done
+#   backlog     : đã có story nhưng chưa đủ nội dung (thiếu mô tả / tiêu chí nghiệm thu) để Dev làm
+#   ready       : story đã đủ ngữ cảnh, Dev có thể nhận
+#   in-progress : Dev đang làm
+#   review      : chờ QA / nghiệm thu
+#   done        : QA đạt và đã nghiệm thu
+#
+# GHI CHÚ NGUỒN (đọc kỹ):
+#   - docs/epics.md và docs/bmad-office/plan.json không tồn tại; epics.md thật nằm ở
+#     docs/bmad-office/epics.md và chỉ là khung rỗng (Epic 1 -> "Story 1.1: " trống).
+#   - product-brief, prd, architecture, story-*.md đều là khung mẫu chưa có nội dung;
+#     các qa-*.md ghi "đạt (mô phỏng)" nhưng mục "Test đã chạy" trống.
+#   - Repo chưa có mã nguồn nào ngoài docs/, nên chưa story nào được coi là done.
+#   - Tên epic / story suy ra từ yêu cầu #1 (docs/bmad-office/yeu-cau/yeu-cau-001.md),
+#     là GIẢ ĐỊNH, cần PM (Tàng Thư Sinh) xác nhận khi hoàn thiện epics.md.
+
 project: "ISS"
-generated: "2026-11-15T11:10:50.328Z"
+generated: "2026-11-15"
+current_sprint: 1
+sprint_goal: "Hoàn thành Epic 1 (quản lý thông tin máy chủ) từ story 1.1 đến 1.3, theo thứ tự."
+
+# Cổng chuyển backlog -> ready: story-x.y.md phải có (1) mô tả "Là một… tôi muốn… để…",
+# (2) tiêu chí nghiệm thu cụ thể, (3) ghi chú kỹ thuật bám architecture.md.
+# Hiện cả 6 story chưa qua cổng này.
+
+epics:
+  "1":
+    title: "Quản lý thông tin máy chủ"   # giả định, theo yêu cầu #1
+    status: backlog
+    sprint: 1
+    depends_on: []
+    note: "Nền tảng dữ liệu máy chủ; Epic 2 tham chiếu máy chủ nên làm trước."
+  "2":
+    title: "Quản lý và cài đặt ứng dụng"   # giả định, theo yêu cầu #1
+    status: backlog
+    sprint: 2
+    depends_on: ["1"]
+    note: "Ngoài phạm vi sprint 1. Xếp sau Epic 1 vì ứng dụng cài đặt gắn với máy chủ (giả định)."
+
+# order: thứ tự thực hiện toàn cục (1 = làm đầu tiên).
 stories:
-  "1.1": { title: "Story 1.1", status: todo }
-  "1.2": { title: "Story 1.2", status: todo }
-  "1.3": { title: "Story 1.3", status: todo }
-  "2.1": { title: "Story 2.1", status: todo }
-  "2.2": { title: "Story 2.2", status: todo }
-  "2.3": { title: "Story 2.3", status: todo }
+  "1.1":
+    epic: "1"
+    title: "Story 1.1"     # chưa có tiêu đề thật
+    status: backlog
+    sprint: 1
+    order: 1
+    depends_on: []
+    note: "Móng của epic (dự kiến mô hình dữ liệu / CRUD máy chủ). story-1.1.md còn là khung rỗng; cần soạn mô tả + AC trước khi sang ready."
+  "1.2":
+    epic: "1"
+    title: "Story 1.2"
+    status: backlog
+    sprint: 1
+    order: 2
+    depends_on: ["1.1"]
+    note: "Làm sau 1.1. story-1.2.md còn là khung rỗng."
+  "1.3":
+    epic: "1"
+    title: "Story 1.3"
+    status: backlog
+    sprint: 1
+    order: 3
+    depends_on: ["1.2"]
+    note: "Làm sau 1.2. story-1.3.md còn là khung rỗng."
+  "2.1":
+    epic: "2"
+    title: "Story 2.1"
+    status: backlog
+    sprint: 2
+    order: 4
+    depends_on: ["1.1"]
+    note: "Cần thực thể máy chủ từ 1.1 (giả định). Có thể làm song song với 1.2/1.3 nếu muốn, nhưng giữ sprint 2 để tập trung."
+  "2.2":
+    epic: "2"
+    title: "Story 2.2"
+    status: backlog
+    sprint: 2
+    order: 5
+    depends_on: ["2.1"]
+    note: "story-2.2.md còn là khung rỗng."
+  "2.3":
+    epic: "2"
+    title: "Story 2.3"
+    status: backlog
+    sprint: 2
+    order: 6
+    depends_on: ["2.2"]
+    note: "story-2.3.md còn là khung rỗng."
+
+# Rủi ro / việc cần xử lý trước khi Dev bắt đầu sprint 1
+blockers:
+  - "epics.md, prd.md, architecture.md chưa có nội dung -> PM/Architect cần hoàn thiện trước; Scrum Master không tự bịa yêu cầu."
+  - "Cả 6 story còn là khung; Scrum Master sẽ soạn đầy đủ story 1.1 -> 1.3 (Create Story) ngay khi epics.md có nội dung."
+  - "Báo cáo QA hiện toàn 'mô phỏng', chưa có test thật; không dùng làm căn cứ để đánh dấu done."
