@@ -79,7 +79,7 @@ stories:
     sprint: 1
     order: 2
     depends_on: ["1.1"]
-    note: "Commit feat(story-1.2) + test(story-1.2): QA PASS. Màn danh sách/chi tiết là nơi 2.2 hiển thị bản ghi cài đặt. Nhãn tiếng Việt và trường tìm kiếm là giả định của SM, cần PM xác nhận."
+    note: "Story 1.2 được soạn lại đầy đủ ngày 2026-11-15 (docs/stories/1.2.story.md, bản sao docs/bmad-office/story-1.2.md; tài liệu ghi 'Ready', Dev Record/QA Results để trống) vì tệp cũ bị khung rỗng ghi đè. Mã + QA PASS đã có từ sprint 1 nên trạng thái ở đây GIỮ done (không hạ về ready để khỏi mở lại Epic 1/sprint 1); muốn Dev làm lại thì báo SM. Commit feat(story-1.2) + test(story-1.2): QA PASS. Màn danh sách/chi tiết là nơi 2.2 hiển thị bản ghi cài đặt. Nhãn tiếng Việt và trường tìm kiếm là giả định của SM, cần PM xác nhận."
   "1.3":
     epic: "1"
     title: "Thêm, sửa, xóa máy chủ và lưu dữ liệu vào localStorage"
