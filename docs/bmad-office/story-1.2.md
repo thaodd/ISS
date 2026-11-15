@@ -3,7 +3,7 @@
 - **Project:** ISS
 - **Epic:** 1 – Quản lý thông tin máy chủ
 - **Người soạn:** Thiết Tướng · Scrum Master (Bob)
-- **Trạng thái:** Review
+- **Trạng thái:** Done
 - **Phụ thuộc:** Story 1.1 (Done) – dùng lại kiểu `Server`, `serverRepository`, `validateServer`
 - **Bàn giao cho:** Kiếm Thánh · Developer
 
@@ -173,4 +173,14 @@ npm run build   -> tsc -b + vite build đạt (24 module)
 
 ## QA Results
 
-_(để trống – QA điền)_
+**QA:** Linh Y Tiên Tử (Quinn) · 2026-11-15 · Node v22.13.0 · Báo cáo đầy đủ: `qa-1.2.md`
+
+**Kết luận: ĐẠT (PASS)** – AC1–AC10 đều đạt.
+
+- Chạy lại độc lập: `npm run lint` đạt (0 lỗi/0 cảnh báo); `npm run build` đạt (24 module); `npm test` đạt 8 tệp, 75/75 test.
+- Đã đọc toàn bộ mã và test của story; kiểm tra tĩnh: UI không import `servers.json`, không `any`, không `dangerouslySetInnerHTML`, không thêm thư viện runtime.
+- V2/V3 của qa-1.1 đã xử lý (`engines`, test `App` không mock).
+- Vấn đề còn lại, không chặn: **V1 (Trung bình)** mã 1.1 + 1.2 chưa commit đủ nên checkout sạch từ `HEAD` không build được, cần commit đủ tệp; V2 (Thấp) jsdom khởi tạo 8 lần làm test chậm ~51 giây; V3 (Thấp) chưa quản lý focus khi chuyển danh sách ↔ chi tiết.
+- Hạn chế: chưa kiểm tra bằng trình duyệt thật, chưa có báo cáo độ phủ.
+
+**Trạng thái:** Done.
