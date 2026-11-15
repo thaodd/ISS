@@ -1,6 +1,6 @@
 # sprint-status.yaml — tạo bởi BMAD Office (mô phỏng)
 project: "ISS"
-generated: "2026-11-15T09:26:14.415Z"
+generated: "2026-11-15T11:10:50.328Z"
 stories:
   "1.1": { title: "Story 1.1", status: todo }
   "1.2": { title: "Story 1.2", status: todo }
